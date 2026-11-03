@@ -35,6 +35,29 @@ command, and a test suite that reads every vector.
    `./gradlew :codegen:checkTables` compares them byte for byte. A data update therefore changes the
    generated files and nothing else, and a stale table fails CI.
 
+## Versions and release dates
+
+Every version is pinned in `gradle/libs.versions.toml`. The dates are the Maven Central upload
+dates (the distribution date for Gradle), all at least 14 days before 2026-11-03.
+
+| Dependency | Version | Released | Scope |
+|---|---|---|---|
+| Gradle | 9.6.0 | 2026-06-18 | build |
+| JUnit Jupiter | 5.14.4 | 2026-04-26 | test |
+| jqwik | 1.10.1 | 2026-05-29 | test |
+| JMH | 1.37 | 2023-08-03 | benchmark |
+| JSpecify | 1.0.0 | 2024-07-16 | compile-only |
+| SpotBugs | 4.10.5 | 2026-10-12 | build |
+| Spotless | 8.10.4 | 2026-10-08 | build |
+| google-java-format | 1.28.0 | 2025-07-09 | build |
+| JaCoCo | 0.8.15 | 2026-06-04 | build |
+| Vanniktech Maven Publish | 0.37.0 | 2026-06-21 | build |
+| PIT | 1.30.1 | 2026-10-14 | build |
+| PIT JUnit 5 plugin | 1.2.3 | 2025-05-20 | build |
+| PIT Gradle plugin | 1.19.0 | 2025-10-11 | build |
+| Kotlin stdlib | 2.4.20 | 2026-09-07 | benchmark only |
+| shivathapaa nepali-date-picker-core | 3.3.0 | 2026-09-21 | benchmark only |
+
 ## Consequences
 
 - A user adds one or two coordinates with no transitive dependency.
