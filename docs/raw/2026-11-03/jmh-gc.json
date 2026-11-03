@@ -5,7 +5,7 @@
         "mode" : "avgt",
         "threads" : 1,
         "forks" : 1,
-        "jvm" : "D:\\devcache\\gradle\\jdks\\eclipse_adoptium-17-amd64-windows.2\\bin\\java.exe",
+        "jvm" : "java",
         "jvmArgs" : [
             "-Xmx1g"
         ],
@@ -147,7 +147,7 @@
         "mode" : "avgt",
         "threads" : 1,
         "forks" : 1,
-        "jvm" : "D:\\devcache\\gradle\\jdks\\eclipse_adoptium-17-amd64-windows.2\\bin\\java.exe",
+        "jvm" : "java",
         "jvmArgs" : [
             "-Xmx1g"
         ],
@@ -289,7 +289,7 @@
         "mode" : "avgt",
         "threads" : 1,
         "forks" : 1,
-        "jvm" : "D:\\devcache\\gradle\\jdks\\eclipse_adoptium-17-amd64-windows.2\\bin\\java.exe",
+        "jvm" : "java",
         "jvmArgs" : [
             "-Xmx1g"
         ],
@@ -431,7 +431,7 @@
         "mode" : "avgt",
         "threads" : 1,
         "forks" : 1,
-        "jvm" : "D:\\devcache\\gradle\\jdks\\eclipse_adoptium-17-amd64-windows.2\\bin\\java.exe",
+        "jvm" : "java",
         "jvmArgs" : [
             "-Xmx1g"
         ],
@@ -573,7 +573,7 @@
         "mode" : "avgt",
         "threads" : 1,
         "forks" : 1,
-        "jvm" : "D:\\devcache\\gradle\\jdks\\eclipse_adoptium-17-amd64-windows.2\\bin\\java.exe",
+        "jvm" : "java",
         "jvmArgs" : [
             "-Xmx1g"
         ],
@@ -745,7 +745,7 @@
         "mode" : "avgt",
         "threads" : 1,
         "forks" : 1,
-        "jvm" : "D:\\devcache\\gradle\\jdks\\eclipse_adoptium-17-amd64-windows.2\\bin\\java.exe",
+        "jvm" : "java",
         "jvmArgs" : [
             "-Xmx1g"
         ],
@@ -887,7 +887,7 @@
         "mode" : "avgt",
         "threads" : 1,
         "forks" : 1,
-        "jvm" : "D:\\devcache\\gradle\\jdks\\eclipse_adoptium-17-amd64-windows.2\\bin\\java.exe",
+        "jvm" : "java",
         "jvmArgs" : [
             "-Xmx1g"
         ],
@@ -1029,7 +1029,7 @@
         "mode" : "avgt",
         "threads" : 1,
         "forks" : 1,
-        "jvm" : "D:\\devcache\\gradle\\jdks\\eclipse_adoptium-17-amd64-windows.2\\bin\\java.exe",
+        "jvm" : "java",
         "jvmArgs" : [
             "-Xmx1g"
         ],
