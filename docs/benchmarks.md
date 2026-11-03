@@ -28,7 +28,7 @@ The machine was otherwise idle, so these numbers are not marked preliminary.
 
 | Item | Value |
 |---|---|
-| nepdae-java | 1.0.0-rc.1 (working tree at the measured commit) |
+| nepdate-java | 1.0.0-rc.1 (working tree at the measured commit) |
 | JDK | Temurin 17.0.20.1, `-Xmx1g` |
 | JMH | 1.37, compiler blackholes |
 | Kotlin port | 0.1.0-rc.1, Kotlin stdlib 2.4.20 |
@@ -60,7 +60,7 @@ and [`raw/2026-11-03/jmh-gc.log`](raw/2026-11-03/jmh-gc.log).
 
 ## Results
 
-| ID | Operation | nepdae-java ns/op | error | B/op | Kotlin ns/op | error | shivathapaa ns/op | agrees | C# .NET 10 ns/op |
+| ID | Operation | nepdate-java ns/op | error | B/op | Kotlin ns/op | error | shivathapaa ns/op | agrees | C# .NET 10 ns/op |
 |---|---:|---:|---:|---:|---:|---:|---:|---|---:|
 | B1 | BS to AD | 13.88 | 0.40 | 0 | 15.08 | 0.73 | 649.45 | no (61 of 64) | 13.50 |
 | B2 | AD to BS | 8.50 | 0.84 | 0 | 6.34 | 0.26 | 590.91 | no (61 of 64) | 20.10 |
@@ -111,3 +111,4 @@ pass, not as a reason to change the Kotlin repository.
   call to one cached instance per covered day. The table above is from the final run.
 - The three benchmark classes share one `BenchmarkInputs`, so the 64 dates are identical for every
   column.
+

@@ -27,9 +27,10 @@ repository joins at `1.0.0-rc.1` with the other ports
 - One CI command, `scripts/ci.sh`, that runs formatting, static analysis, the generator check, both
   test suites, a 90% line-coverage gate, the Javadoc gate, the core isolation check, the
   documentation examples and the release check.
-- Javadoc for every public member, nine architecture decisions, a release runbook, and a README and
+- Javadoc for every public member, eleven architecture decisions, a release runbook, and a README and
   API reference whose Java samples compile, run and are checked against their printed output in CI.
 - A JMH benchmark of B1 to B8 against the published Kotlin artifact, the Maven Central competitor
   and the C# baseline, with the evidence in `docs/competitors.md`.
 - CI on Linux, macOS and Windows over Java 17, 21 and 25, the hub's shared-check, CodeQL, Scorecard,
   dependency review, a scheduled mutation run, and the release and verify-published workflows.
+

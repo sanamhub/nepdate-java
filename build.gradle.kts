@@ -1,5 +1,5 @@
 // The two published libraries, the table generator and the JMH benchmarks, in one Gradle build.
-// The layout and the gates are ADR-0001 and ADR-0006; the release setup is ADR-0007.
+// The layout and the gates are ADR-0001 and ADR-0004; the release setup is ADR-0007.
 
 import com.diffplug.gradle.spotless.SpotlessExtension
 import com.github.spotbugs.snom.Confidence
@@ -77,7 +77,7 @@ configure(subprojects.filter { it.path in libraryProjects }) {
     configure<SpotBugsExtension> {
         toolVersion.set(spotbugsVersion)
         effort.set(Effort.MAX)
-        // Every bug pattern at every priority: a finding is fixed, not filtered (ADR-0006 gate 2).
+        // Every bug pattern at every priority: a finding is fixed, not filtered (ADR-0004 gate 2).
         reportLevel.set(Confidence.LOW)
         excludeFilter.set(rootProject.layout.projectDirectory.file("config/spotbugs/exclude.xml"))
     }
@@ -113,7 +113,7 @@ configure(subprojects.filter { it.path in libraryProjects }) {
         standard.encoding = "UTF-8"
         standard.charSet = "UTF-8"
         standard.docEncoding = "UTF-8"
-        // Every public type and member is documented (ADR-0006 gate 5): a missing comment fails
+        // Every public type and member is documented (ADR-0004 gate 5): a missing comment fails
         // the javadoc jar that Maven Central serves.
         standard.addBooleanOption("Xdoclint:all", true)
         standard.addBooleanOption("Werror", true)
@@ -220,7 +220,17 @@ val checkCoreSplit = tasks.register("checkCoreSplit") {
 }
 
 tasks.register("checkAll") {
-    description = "Everything scripts/ci.sh runs, for an IDE or a one-command local check."
+    description = "The Gradle gates scripts/ci.sh runs, for an IDE or a one-command local check."
     group = "verification"
-    dependsOn(":nepdate-java:check", ":nepdate-java-patro:check", ":codegen:checkTables", ":benchmarks:classes", checkCoreSplit)
+    dependsOn(
+        ":nepdate-java:check",
+        ":nepdate-java-patro:check",
+        ":nepdate-java:javadoc",
+        ":nepdate-java-patro:javadoc",
+        ":codegen:check",
+        ":benchmarks:classes",
+        checkCoreSplit,
+    )
 }
+
+
