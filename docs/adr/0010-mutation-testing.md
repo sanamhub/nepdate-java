@@ -18,9 +18,14 @@ it cannot run on every push.
    `nepdateMaxSurviving` (count). They are set one point or a few mutants below the measured score,
    so a regression fails without rounding hiding it. `scripts/test-mutation.sh` proves both
    thresholds fail when they should.
-3. **Only tests that would change every mutant are excluded** from the PIT run: the exhaustive walk
-   over 109212 serials and the jqwik properties would repeat for every mutant. The deterministic
-   vector tests still cover those paths.
+3. **Tests whose cost is disproportionate are excluded from the PIT run, not from CI.** The
+   exhaustive walk over 109212 serials and the jqwik properties would repeat the whole search for
+   every mutant. The five vector classes that read one row per dynamic invocation (1018 to 10,180
+   invocations each) are excluded too: PIT selects every covering invocation for a mutant, so one
+   unit became tens of thousands of test runs. They still run on every push and on all three
+   operating systems; the remaining tests, chiefly `ApiTest`, `ArithmeticEdgeTest`,
+   `CoverageEdgesTest`, `ParseVectorTest` and the range tests, cover the mutated lines, and a line
+   that becomes NO_COVERAGE in the PIT report is visible in the score rather than hidden.
 4. **Generated tables are excluded as targets,** because they are data and `:codegen:checkTables`
    owns them.
 5. **A surviving mutant that cannot be killed is listed in `docs/mutation/equivalent.md`** with the

@@ -17,9 +17,10 @@ The PHP port hit the same situation and documented it rather than weakening the 
 2. **The matrix is real.** Linux, macOS and Windows, each over Java 17, 21 and 25. The toolchain is
    the same on all nine cells; nothing is skipped on an operating system.
 3. **`shared-check` calls the hub's reusable workflow pinned to a commit.** It compares `shared/`
-   and the version. Until the hub branch is merged, that job is the one red check; the release
-   runbook says no tag is cut before it is green, and the hub branch is written for the release
-   state.
+   with the hub commit in `shared/VERSION` and checks this port's version against that commit's
+   `spec/versions.json`. Until the hub branch is merged the job is the one red check; after the
+   merge a shared-sync pull request moves `shared/VERSION` to the release-state commit, and only
+   then does the version check see the 1.0 line. The runbook says no tag is cut before it is green.
 4. **The workflows are pinned by commit SHA** with the version in a comment, top-level
    `permissions: contents: read`, raised per job only where needed. No `pull_request_target`, no
    secrets in a job that runs a pull request's code.

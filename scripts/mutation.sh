@@ -50,9 +50,12 @@ total="$(count '<mutation ')"
 statuses="$(count "status='")"
 killed="$(count "status='KILLED'")"
 timed_out="$(count "status='TIMED_OUT'")"
+memory_error="$(count "status='MEMORY_ERROR'")"
 survived="$(count "status='SURVIVED'")"
 no_coverage="$(count "status='NO_COVERAGE'")"
-detected=$((killed + timed_out))
+# PIT counts a timed-out and a memory-error mutant as detected in its own score, so the gate does
+# the same; the report still shows both counts so a rise cannot hide in the total.
+detected=$((killed + timed_out + memory_error))
 missed=$((survived + no_coverage))
 unclassified=$((total - detected - missed))
 
@@ -93,5 +96,5 @@ if [ "$score" -lt "$threshold" ]; then
   exit 1
 fi
 
-echo "mutation: score ${score}% (threshold ${threshold}%, max surviving ${max_surviving})"
+echo "mutation: score ${score}% (threshold ${threshold}%, max surviving ${max_surviving}, timed out ${timed_out}, memory errors ${memory_error})"
 

@@ -22,9 +22,19 @@ pitest {
     excludedClasses.set(setOf("io.github.sanamhub.nepdate.java.CalendarTable"))
     excludedTestClasses.set(
         setOf(
+            // The exhaustive walk and the jqwik properties would repeat the whole search for
+            // every mutant.
             "io.github.sanamhub.nepdate.java.ExhaustiveTest",
             "io.github.sanamhub.nepdate.java.PropertiesTest",
-            "io.github.sanamhub.nepdate.java.DocsExamplesTest",
+            // These five read a vector row per dynamic invocation: 1018 to 10,180 of them. PIT
+            // selects every covering invocation for each mutant, so keeping them turns one unit
+            // into tens of thousands of test runs. They run in the normal gate on every push; the
+            // remaining tests still cover the lines they reach (ADR-0010).
+            "io.github.sanamhub.nepdate.java.DatesVectorTest",
+            "io.github.sanamhub.nepdate.java.AddDaysVectorTest",
+            "io.github.sanamhub.nepdate.java.AddMonthsVectorTest",
+            "io.github.sanamhub.nepdate.java.MonthBoundariesVectorTest",
+            "io.github.sanamhub.nepdate.java.FormatPatternVectorTest",
         ),
     )
     threads.set(1)
@@ -37,12 +47,15 @@ pitest {
     maxSurviving.set(
         providers.gradleProperty("nepdateMaxSurviving").orNull?.toInt() ?: 0,
     )
-    // PIT starts its own JVMs, so the vector tests need the shared directory there too, and a
-    // small explicit heap keeps four minions from competing with the build's own JVM.
+    threads.set(2)
+    // PIT starts its own JVMs, so the vector tests need the shared directory there too. The
+    // minion heap is explicit rather than the JVM default, which is a quarter of the runner's
+    // memory and would compete with the build's own daemon.
     jvmArgs.set(
         listOf(
             "-Xmx512m",
             "-XX:MaxMetaspaceSize=256m",
+            "-XX:ReservedCodeCacheSize=128m",
             "-Dnepdate.shared=${rootProject.file("shared").absolutePath}",
             "-Dnepdate.repoRoot=${rootProject.projectDir.parentFile.absolutePath}",
         ),
