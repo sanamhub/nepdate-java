@@ -87,7 +87,7 @@ jobs:
       VERSION: ${{ needs.preflight.outputs.version }}
       # The release signing key (docs/runbooks/release.md). Signatures are checked against this
       # fingerprint, so a different key in the secret fails here instead of at Central.
-      SIGNING_KEY_FINGERPRINT: 44ED6E4129D97536CAE086175B979A307721A17B
+      SIGNING_KEY_FINGERPRINT: 67F7E1DCEF7AB552CEA4E74F2B5A7BB44F5A1989
       ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.ORG_GRADLE_PROJECT_mavenCentralUsername }}
       ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.ORG_GRADLE_PROJECT_mavenCentralPassword }}
       ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.ORG_GRADLE_PROJECT_signingInMemoryKey }}
