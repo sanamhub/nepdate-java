@@ -47,15 +47,16 @@ pitest {
     maxSurviving.set(
         providers.gradleProperty("nepdateMaxSurviving").orNull?.toInt() ?: 0,
     )
-    threads.set(2)
-    // PIT starts its own JVMs, so the vector tests need the shared directory there too. The
-    // minion heap is explicit rather than the JVM default, which is a quarter of the runner's
-    // memory and would compete with the build's own daemon.
+    // One small C1-only minion: the gate must also run on a developer machine that is short of
+    // commit memory, and the mutation score does not depend on the JIT tier. On the scheduled
+    // runner the same settings finish in a few minutes.
     jvmArgs.set(
         listOf(
-            "-Xmx512m",
-            "-XX:MaxMetaspaceSize=256m",
-            "-XX:ReservedCodeCacheSize=128m",
+            "-Xmx256m",
+            "-XX:MaxMetaspaceSize=128m",
+            "-XX:ReservedCodeCacheSize=64m",
+            "-XX:TieredStopAtLevel=1",
+            "-XX:+UseSerialGC",
             "-Dnepdate.shared=${rootProject.file("shared").absolutePath}",
             "-Dnepdate.repoRoot=${rootProject.projectDir.parentFile.absolutePath}",
         ),
