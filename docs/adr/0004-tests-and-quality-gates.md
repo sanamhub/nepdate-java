@@ -26,7 +26,10 @@ choices for each gate, and the ten ports already show which ones survive review.
    lives in `gradle.properties` (`nepdateCoverageMinimum`) so CI and a local run use the same
    number. The measured coverage is higher and reported in the pull request.
 4. **Spotless with google-java-format.** Formatting is a check, not a style discussion. The
-   generated tables are excluded because `:codegen:checkTables` owns their exact bytes.
+   generated tables are excluded because `:codegen:checkTables` owns their exact bytes. The Gradle
+   JVM is Java 17 in every CI cell: google-java-format 1.28 is the last version that runs on 17 and
+   it refuses 21 or newer, while 1.30 and newer refuse 17. The matrix JDK is the toolchain, so the
+   compile and the tests still run on 17, 21 and 25 and the format check runs once on 17.
 5. **Javadoc is a gate.** `javadoc` runs with `-Xdoclint:all -Werror`, so a public member without a
    comment fails the javadoc jar that Maven Central serves. `docs/API.md` is the narrative copy of
    the same surface.

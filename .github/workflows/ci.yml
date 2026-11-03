@@ -41,11 +41,18 @@ jobs:
         with:
           distribution: temurin
           java-version: ${{ matrix.java }}
+      # The Gradle JVM is 17 in every cell, because google-java-format's required version depends
+      # on the JVM: 1.28 needs 17 and refuses 21 or newer, and 1.30 and newer refuse 17. The
+      # matrix JDK is the toolchain, so the compile and the tests still run on 17, 21 and 25.
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: "17"
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
       - run: ./scripts/ci.sh
         env:
-          # The matrix selects the toolchain, so the tests really run on 17, 21 and 25. The
-          # resolver downloads a JDK only when JAVA_HOME does not already hold that version.
+          # The toolchain is the matrix JDK; the resolver downloads it only when Gradle does not
+          # already know it.
           ORG_GRADLE_PROJECT_nepdateToolchain: ${{ matrix.java }}
 
   # Reads the version from gradle.properties through the same script the release uses, so the
