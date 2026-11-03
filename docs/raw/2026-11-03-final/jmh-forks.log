@@ -1,6 +1,6 @@
 # JMH version: 1.37
 # VM version: JDK 17.0.20.1, OpenJDK 64-Bit Server VM, 17.0.20.1+1
-# VM invoker: D:\devcache\gradle\jdks\eclipse_adoptium-17-amd64-windows.2\bin\java.exe
+# VM invoker: java (Temurin 17.0.20.1)
 # VM options: -Xmx1g
 # Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
 # Warmup: 5 iterations, 1 s each
@@ -66,14 +66,14 @@ Iteration  10: 1.184 ns/op
 
 
 Result "io.github.sanamhub.nepdate.java.bench.JavaBenchmark.b7PatroInfo":
-  1.402 ±(99.9%) 0.206 ns/op [Average]
+  1.402 ï¿½(99.9%) 0.206 ns/op [Average]
   (min, avg, max) = (1.178, 1.402, 2.428), stdev = 0.308
   CI (99.9%): [1.196, 1.607] (assumes normal distribution)
 
 
 # JMH version: 1.37
 # VM version: JDK 17.0.20.1, OpenJDK 64-Bit Server VM, 17.0.20.1+1
-# VM invoker: D:\devcache\gradle\jdks\eclipse_adoptium-17-amd64-windows.2\bin\java.exe
+# VM invoker: java (Temurin 17.0.20.1)
 # VM options: -Xmx1g
 # Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
 # Warmup: 5 iterations, 1 s each
@@ -139,14 +139,14 @@ Iteration  10: 56.899 ns/op
 
 
 Result "io.github.sanamhub.nepdate.java.bench.JavaBenchmark.b8PatroMonthGrid":
-  52.495 ±(99.9%) 1.862 ns/op [Average]
+  52.495 ï¿½(99.9%) 1.862 ns/op [Average]
   (min, avg, max) = (50.600, 52.495, 62.327), stdev = 2.786
   CI (99.9%): [50.634, 54.357] (assumes normal distribution)
 
 
 # JMH version: 1.37
 # VM version: JDK 17.0.20.1, OpenJDK 64-Bit Server VM, 17.0.20.1+1
-# VM invoker: D:\devcache\gradle\jdks\eclipse_adoptium-17-amd64-windows.2\bin\java.exe
+# VM invoker: java (Temurin 17.0.20.1)
 # VM options: -Xmx1g
 # Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
 # Warmup: 5 iterations, 1 s each
@@ -212,14 +212,14 @@ Iteration  10: 1.085 ns/op
 
 
 Result "io.github.sanamhub.nepdate.java.bench.KotlinBenchmark.b7PatroInfo":
-  1.018 ±(99.9%) 0.025 ns/op [Average]
+  1.018 ï¿½(99.9%) 0.025 ns/op [Average]
   (min, avg, max) = (0.993, 1.018, 1.112), stdev = 0.038
   CI (99.9%): [0.992, 1.043] (assumes normal distribution)
 
 
 # JMH version: 1.37
 # VM version: JDK 17.0.20.1, OpenJDK 64-Bit Server VM, 17.0.20.1+1
-# VM invoker: D:\devcache\gradle\jdks\eclipse_adoptium-17-amd64-windows.2\bin\java.exe
+# VM invoker: java (Temurin 17.0.20.1)
 # VM options: -Xmx1g
 # Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
 # Warmup: 5 iterations, 1 s each
@@ -285,7 +285,7 @@ Iteration  10: 48.157 ns/op
 
 
 Result "io.github.sanamhub.nepdate.java.bench.KotlinBenchmark.b8PatroMonthGrid":
-  48.651 ±(99.9%) 1.081 ns/op [Average]
+  48.651 ï¿½(99.9%) 1.081 ns/op [Average]
   (min, avg, max) = (47.827, 48.651, 56.989), stdev = 1.618
   CI (99.9%): [47.570, 49.732] (assumes normal distribution)
 
@@ -305,9 +305,9 @@ different JVMs are already problematic, the performance difference caused by dif
 modes can be very significant. Please make sure you use the consistent Blackhole mode for comparisons.
 
 Benchmark                         Mode  Cnt   Score   Error  Units
-JavaBenchmark.b7PatroInfo         avgt   30   1.402 ± 0.206  ns/op
-JavaBenchmark.b8PatroMonthGrid    avgt   30  52.495 ± 1.862  ns/op
-KotlinBenchmark.b7PatroInfo       avgt   30   1.018 ± 0.025  ns/op
-KotlinBenchmark.b8PatroMonthGrid  avgt   30  48.651 ± 1.081  ns/op
+JavaBenchmark.b7PatroInfo         avgt   30   1.402 ï¿½ 0.206  ns/op
+JavaBenchmark.b8PatroMonthGrid    avgt   30  52.495 ï¿½ 1.862  ns/op
+KotlinBenchmark.b7PatroInfo       avgt   30   1.018 ï¿½ 0.025  ns/op
+KotlinBenchmark.b8PatroMonthGrid  avgt   30  48.651 ï¿½ 1.081  ns/op
 
 Benchmark result is saved to docs/raw/2026-11-03-final/jmh-forks.json
