@@ -2,7 +2,7 @@
 # dependency must be at least 14 days old.
 [versions]
 junit = "5.14.4"
-jqwik = "1.10.1"
+jqwik = "1.10.2"
 jmh = "1.37"
 jspecify = "1.0.0"
 spotbugs-plugin = "6.5.13"
