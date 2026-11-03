@@ -1,0 +1,31 @@
+name: Feature request
+description: An API, a format or a behaviour that the port should have.
+title: "feat: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A new API belongs in the hub's specification first, so every port has it:
+        https://github.com/sanamhub/nepdate/issues. This repository implements the specification.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is missing
+      description: What you are trying to do and why the current API does not cover it.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed API
+      description: The Java signature you would like, and what it should return.
+    validations:
+      required: false
+  - type: input
+    id: spec
+    attributes:
+      label: Hub specification section
+      description: If the hub already specifies this, name the file and section.
+    validations:
+      required: false

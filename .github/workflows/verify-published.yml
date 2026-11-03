@@ -1,0 +1,153 @@
+# Installs one published version of both artifacts from Maven Central the way a user does, and
+# checks it. release.yml calls it after publishing; the weekly run does the full install and the
+# daily run only HEAD requests, so the schedule never looks like download traffic.
+name: verify-published
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: Published version, or latest for the newest version on Maven Central
+        required: false
+        default: latest
+        type: string
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Published version, or latest for the newest version on Maven Central
+        required: false
+        default: latest
+        type: string
+  schedule:
+    # The weekly install check, Monday 06:41 UTC.
+    - cron: "41 6 * * 1"
+    # The daily metadata check, which downloads no jar.
+    - cron: "29 3 * * *"
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  resolve:
+    name: resolve the version
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      version: ${{ steps.resolve.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Resolve
+        id: resolve
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          version="${INPUT_VERSION:-latest}"
+          if [ "$version" = latest ]; then
+            metadata="$(curl -sSL https://repo1.maven.org/maven2/io/github/sanamhub/nepdate-java/maven-metadata.xml)"
+            version="$(printf '%s\n' "$metadata" | grep -o '<version>[^<]*' | sed 's/<version>//' | tail -n 1)"
+          fi
+          if [ -z "$version" ]; then
+            echo "::error::could not resolve a published version"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Resolved version: \`$version\`" >> "$GITHUB_STEP_SUMMARY"
+
+  # A release or a manual run: both registries and both artifacts on all three systems.
+  verify:
+    name: verify ${{ needs.resolve.outputs.version }}
+    if: github.event_name != 'schedule'
+    needs: resolve
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Install and check the published artifacts
+        env:
+          VERSION: ${{ needs.resolve.outputs.version }}
+        run: ./scripts/verify-published.sh "$VERSION"
+
+  # The weekly check: the full install on Linux, so a broken artifact cannot pass unseen.
+  weekly:
+    name: weekly ${{ needs.resolve.outputs.version }}
+    if: github.event_name == 'schedule' && github.event.schedule == '41 6 * * 1'
+    needs: resolve
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Install and check the published artifacts
+        env:
+          VERSION: ${{ needs.resolve.outputs.version }}
+        run: ./scripts/verify-published.sh "$VERSION"
+
+  # The daily check: the registry still lists both artifacts and both signatures, without a
+  # download.
+  metadata:
+    name: metadata ${{ needs.resolve.outputs.version }}
+    if: github.event_name == 'schedule' && github.event.schedule == '29 3 * * *'
+    needs: resolve
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Check the registry listing
+        env:
+          VERSION: ${{ needs.resolve.outputs.version }}
+        run: ./scripts/verify-published.sh "$VERSION" --metadata
+
+  # The only job with write access. It reads the result and opens or updates one issue; it never
+  # installs anything and never touches the registry.
+  report:
+    name: report
+    if: failure() && github.event_name == 'schedule'
+    needs: [resolve, verify, weekly, metadata]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Open or update the issue
+        env:
+          VERSION: ${{ needs.resolve.outputs.version }}
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          title="published-check: nepdate-java $VERSION"
+          body="The scheduled published check failed for \`$VERSION\` (\`$RUN_URL\`). See the run and the \`published-check\` label."
+          number="$(gh issue list --label published-check --state open --search "$title in:title" --json number --jq '.[0].number // empty')"
+          if [ -n "$number" ]; then
+            gh issue comment "$number" --body "$body"
+          else
+            gh issue create --title "$title" --body "$body" --label published-check
+          fi

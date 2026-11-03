@@ -1,0 +1,21 @@
+version: 2
+updates:
+  # Keeps the pinned action SHAs current. The cooldown gives a bad release two weeks to be pulled,
+  # the same rule the dev tools follow (ADR-0004). The hub workflow is pinned by commit, not by tag,
+  # so it moves with the shared-sync reviews instead.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 14
+  # Dev tools only: neither artifact has a runtime dependency (ADR-0001). This covers the Gradle
+  # build, the version catalog and the wrapper.
+  - package-ecosystem: gradle
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 14

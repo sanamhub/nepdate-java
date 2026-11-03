@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: A wrong date, holiday or tithi in every language
+    url: https://github.com/sanamhub/nepdate/issues
+    about: The calendar data and the specification live in the hub; a fix there reaches every port.
+  - name: A security vulnerability
+    url: https://github.com/sanamhub/nepdate-java/security/advisories/new
+    about: Report privately, not in a public issue.

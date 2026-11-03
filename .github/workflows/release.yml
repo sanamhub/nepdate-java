@@ -1,0 +1,209 @@
+# ADR-0007 and docs/runbooks/release.md. A v* tag push checks the version, runs CI and, after the
+# production approval, signs both artifacts, verifies every signature, uploads them to Maven
+# Central, creates the GitHub Release and calls verify-published.yml. workflow_dispatch is the dry
+# run: preflight and CI run against the chosen tag name, and nothing is signed or uploaded.
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to validate in the dry run, for example v1.0.0-rc.1"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  preflight:
+    name: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      version: ${{ steps.check.outputs.version }}
+    steps:
+      # Full history, so a tag can be checked against main.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: The tagged commit is on main
+        if: github.event_name == 'push'
+        run: |
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "::error::tag $GITHUB_REF_NAME points at a commit that is not on main"
+            exit 1
+          fi
+      - name: Version, tag and changelog agree
+        id: check
+        env:
+          TAG: ${{ github.event_name == 'push' && github.ref_name || inputs.tag }}
+        run: |
+          set -euo pipefail
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            bash scripts/release-check.sh "$TAG"
+          else
+            # The dry run accepts the Unreleased heading until the bump pull request.
+            bash scripts/release-check.sh --draft "$TAG"
+          fi
+          echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+
+  ci:
+    name: ci
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: gradle/actions/wrapper-validation@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      - run: ./scripts/ci.sh
+
+  publish:
+    name: publish
+    needs: [preflight, ci]
+    # Only a tag push publishes; workflow_dispatch is the dry run.
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    environment: production
+    # The GitHub Release needs write; every other job reads only.
+    permissions:
+      contents: write
+    env:
+      VERSION: ${{ needs.preflight.outputs.version }}
+      # The release signing key (docs/runbooks/release.md). Signatures are checked against this
+      # fingerprint, so a different key in the secret fails here instead of at Central.
+      SIGNING_KEY_FINGERPRINT: 44ED6E4129D97536CAE086175B979A307721A17B
+      ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.ORG_GRADLE_PROJECT_mavenCentralUsername }}
+      ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.ORG_GRADLE_PROJECT_mavenCentralPassword }}
+      ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.ORG_GRADLE_PROJECT_signingInMemoryKey }}
+      ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.ORG_GRADLE_PROJECT_signingInMemoryKeyPassword }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      - name: Secrets are present
+        run: |
+          set -euo pipefail
+          for name in ORG_GRADLE_PROJECT_mavenCentralUsername ORG_GRADLE_PROJECT_mavenCentralPassword \
+                      ORG_GRADLE_PROJECT_signingInMemoryKey ORG_GRADLE_PROJECT_signingInMemoryKeyPassword; do
+            if [ -z "${!name}" ]; then
+              echo "::error::$name is empty in the production environment"
+              exit 1
+            fi
+          done
+      - name: Sign and stage both artifacts in mavenLocal
+        run: ./gradlew --console=plain publishToMavenLocal
+      - name: Exactly the expected files, each signed by the release key
+        # Central rejects a deployment without sources, javadoc or signatures, but only after the
+        # upload. This finds the same problems first, and also an extra file nobody meant to ship.
+        run: |
+          set -euo pipefail
+          gpg --batch --keyserver hkps://keyserver.ubuntu.com --recv-keys "$SIGNING_KEY_FINGERPRINT"
+          for artifact in nepdate-java nepdate-java-patro; do
+            dir="$HOME/.m2/repository/io/github/sanamhub/$artifact/$VERSION"
+            want=""
+            for suffix in .jar -sources.jar -javadoc.jar .pom .module; do
+              want+="$artifact-$VERSION$suffix"$'\n'"$artifact-$VERSION$suffix.asc"$'\n'
+            done
+            got="$(for file in "$dir"/*; do basename "$file"; done | grep -v '^maven-metadata' | sort)"
+            if [ "$got" != "$(printf '%s' "$want" | sort)" ]; then
+              echo "::error::$dir does not hold exactly the expected files"
+              diff <(printf '%s' "$want" | sort) <(printf '%s\n' "$got") || true
+              exit 1
+            fi
+            for file in "$dir"/*.asc; do
+              status="$(gpg --batch --status-fd 1 --verify "$file" "${file%.asc}" 2>/dev/null)"
+              if ! printf '%s\n' "$status" | grep -q "^\[GNUPG:\] VALIDSIG $SIGNING_KEY_FINGERPRINT "; then
+                echo "::error::$(basename "$file") is not a valid signature by $SIGNING_KEY_FINGERPRINT"
+                exit 1
+              fi
+            done
+            echo "$artifact $VERSION: 10 files, 5 signatures by the release key"
+          done
+      - name: Publish both artifacts to Maven Central
+        # The build waits for the Central Portal's validation (DeploymentValidation.VALIDATED), so a
+        # rejected deployment fails this step.
+        run: ./gradlew --console=plain publishAndReleaseToMavenCentral
+      - name: GitHub Release from the changelog section
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          notes="$(mktemp)"
+          # index() matches the heading literally, so the dots in the version are not wildcards.
+          awk -v v="$VERSION" '
+            index($0, "## [" v "] - ") == 1 { found = 1; next }
+            found && /^## \[/ { exit }
+            found { print }
+          ' CHANGELOG.md > "$notes"
+          if ! grep -q '[^[:space:]]' "$notes"; then
+            echo "::error::the changelog section for $VERSION is empty"
+            exit 1
+          fi
+          {
+            echo
+            echo "### Install"
+            echo
+            echo "Gradle (Kotlin DSL):"
+            echo
+            echo '```kotlin'
+            echo "implementation(\"io.github.sanamhub:nepdate-java:$VERSION\")"
+            echo "implementation(\"io.github.sanamhub:nepdate-java-patro:$VERSION\") // tithi, holidays, events"
+            echo '```'
+            echo
+            echo "Maven:"
+            echo
+            echo '```xml'
+            echo "<dependency>"
+            echo "  <groupId>io.github.sanamhub</groupId>"
+            echo "  <artifactId>nepdate-java</artifactId>"
+            echo "  <version>$VERSION</version>"
+            echo "</dependency>"
+            echo '```'
+            echo
+            echo "### Verification"
+            echo
+            echo "- Every file on Maven Central has a \`.asc\` signature by the release key"
+            echo "  \`$SIGNING_KEY_FINGERPRINT\` (on keyserver.ubuntu.com). Check a"
+            echo "  download with \`gpg --verify nepdate-java-$VERSION.jar.asc nepdate-java-$VERSION.jar\`."
+            echo "- After this release, a fresh project resolved both artifacts from Maven Central and"
+            echo "  converted a date and read a patro event on Linux, macOS and Windows"
+            echo "  (verify-published)."
+          } >> "$notes"
+          prerelease=()
+          case "$VERSION" in *-*) prerelease=(--prerelease) ;; esac
+          gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --verify-tag \
+            --title "nepdate-java $VERSION" --notes-file "$notes" "${prerelease[@]}"
+
+  verify-published:
+    name: verify-published
+    needs: [preflight, publish]
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    # The called workflow's report job opens an issue when a scheduled check fails. A caller must
+    # grant every permission a called job requests, even though report never runs on a release.
+    permissions:
+      contents: read
+      issues: write
+    uses: ./.github/workflows/verify-published.yml
+    with:
+      version: ${{ needs.preflight.outputs.version }}

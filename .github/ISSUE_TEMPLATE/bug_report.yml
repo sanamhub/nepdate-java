@@ -1,0 +1,49 @@
+name: Bug report
+description: A date, a format, a parse, a range or a patro result that is wrong.
+title: "bug: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A wrong calendar result that every port gives belongs to the hub:
+        https://github.com/sanamhub/nepdate/issues. Report it there instead.
+  - type: textarea
+    id: input
+    attributes:
+      label: Input and expected result
+      description: The smallest input that shows the problem, and what it should be.
+      placeholder: |
+        NepaliDate.parse("2081/04/15")
+        expected 2081-04-15
+    validations:
+      required: true
+  - type: input
+    id: actual
+    attributes:
+      label: Actual result
+      description: What happened, including the exception kind and message if one was thrown.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The artifact version, for example nepdate-java 1.0.0-rc.1.
+      placeholder: nepdate-java 1.0.0-rc.1
+    validations:
+      required: true
+  - type: input
+    id: java
+    attributes:
+      label: Java version and operating system
+      placeholder: Temurin 17.0.20.1 on Windows 11
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Anything else
+      description: Logs, a failing test, or a pointer to the hub specification section.
+    validations:
+      required: false

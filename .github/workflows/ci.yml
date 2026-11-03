@@ -1,0 +1,121 @@
+# Every gate of ADR-0004 on Linux, macOS and Windows, over Java 17, 21 and 25, plus the hub's
+# shared-check and a consumer that resolves the published coordinates from mavenLocal. A green run
+# here is the same gate a release runs.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # shared-sync starts CI this way on the PR it opens with GITHUB_TOKEN.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    # A workflow with bash run blocks and a Windows job must say so, or Windows uses pwsh.
+    shell: bash
+
+jobs:
+  build:
+    name: build (${{ matrix.os }}, JDK ${{ matrix.java }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        java: ["17", "21", "25"]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: gradle/actions/wrapper-validation@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      - run: ./scripts/ci.sh
+        env:
+          # The matrix selects the toolchain, so the tests really run on 17, 21 and 25. The
+          # resolver downloads a JDK only when JAVA_HOME does not already hold that version.
+          ORG_GRADLE_PROJECT_nepdateToolchain: ${{ matrix.java }}
+
+  # Reads the version from gradle.properties through the same script the release uses, so the
+  # shared-check job gets it from the repository and not from a second copy.
+  version:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Read the Gradle version
+        id: version
+        run: |
+          set -euo pipefail
+          if ! version="$(bash scripts/release-check.sh --print)"; then
+            echo "$version" >&2
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+  # Fails when shared/ differs from the hub at the commit in shared/VERSION, and when this port is
+  # on another MAJOR.MINOR line (hub ADR-0007 decision 3).
+  shared-check:
+    needs: version
+    permissions:
+      contents: read
+    uses: sanamhub/nepdate/.github/workflows/shared-check.yml@f636b7d476bc5959eb5689a950b73c8943860eef # main 2026-11-01
+    with:
+      sdk: java
+      version: ${{ needs.version.outputs.version }}
+
+  # Publishes to mavenLocal and consumes both coordinates in a throwaway project, proving the POMs,
+  # the module descriptors and the README install block before a tag. Windows is in the matrix
+  # because verify-published.yml runs the same script there after a release.
+  consumer-check:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      - run: bash tools/consumer-check/run.sh
+
+  # The workflow files are linted with a checksum-pinned actionlint, because an unpinned action or
+  # a bad expression fails at push time otherwise.
+  actionlint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install actionlint 1.7.12
+        run: |
+          set -euo pipefail
+          curl -sSLo actionlint.tar.gz \
+            https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz
+          echo "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8  actionlint.tar.gz" | sha256sum -c -
+          tar -xzf actionlint.tar.gz actionlint
+          ./actionlint --version
+      - run: ./actionlint

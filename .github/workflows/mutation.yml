@@ -1,0 +1,41 @@
+# Mutation testing (ADR-0010). It runs weekly and by hand, never on a pull request: a full run
+# takes minutes because every mutant runs the deterministic core tests.
+name: mutation
+
+on:
+  schedule:
+    - cron: "17 4 * * 3"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  mutation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      - name: The gate's own controls
+        run: ./scripts/test-mutation.sh
+      - name: PIT on the core
+        run: ./scripts/mutation.sh
+      - name: Keep the report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: mutation-report
+          path: nepdate/build/reports/pitest/
+          if-no-files-found: ignore
+          retention-days: 7
