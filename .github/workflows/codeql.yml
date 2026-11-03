@@ -41,8 +41,10 @@ jobs:
           languages: java-kotlin
           build-mode: manual
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      # The tracer only sees a javac that actually runs. setup-gradle restores the build cache, and
+      # a compileJava FROM-CACHE leaves the analyser with no code, so the cache is off for this build.
       - name: Build the two modules for the analyser
-        run: ./gradlew --console=plain :nepdate-java:compileJava :nepdate-java-patro:compileJava
+        run: ./gradlew --console=plain --no-build-cache :nepdate-java:compileJava :nepdate-java-patro:compileJava
       - uses: github/codeql-action/analyze@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
         with:
           category: /language:java
