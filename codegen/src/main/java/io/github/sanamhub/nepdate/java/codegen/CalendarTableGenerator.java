@@ -88,6 +88,34 @@ final class CalendarTableGenerator {
         .append("). */\n")
         .append("  static final int[] MONTH_START = new int[MONTHS + 1];\n")
         .append("\n")
+        .append("  /** First AD year in JAN1, and the index of the leap half of CUM. */\n")
+        .append("  static final int JAN1_BASE_YEAR = 1844;\n")
+        .append("  static final int LEAP_BASE = 13;\n")
+        .append("\n")
+        .append("  /** Serial of 1 January of AD 1844 + i; entry 0 is -101, before the epoch. */\n")
+        .append("  static final int[] JAN1 = {\n");
+
+    for (int i = 0; i < 302; i++) {
+      int jan1 = CalendarData.daysFromCivil(1844 + i, 1, 1) - epochUnixDays;
+      if (i % 10 == 0) {
+        out.append("      ");
+      }
+      out.append(jan1);
+      if (i < 301) {
+        out.append(", ");
+      }
+      if (i % 10 == 9 || i == 301) {
+        out.append(" // ").append(1844 + i).append('\n');
+      }
+    }
+    out.append("  };\n")
+        .append("\n")
+        .append("  /** Days before each AD month: common year in 0..12, leap year in 13..25. */\n")
+        .append("  static final int[] CUM = {\n")
+        .append("      0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365,\n")
+        .append("      0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366,\n")
+        .append("  };\n")
+        .append("\n")
         .append("  static {\n")
         .append("    int serial = 0;\n")
         .append("    for (int month = 0; month < MONTHS; month++) {\n")

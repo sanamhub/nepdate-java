@@ -59,6 +59,20 @@ public final class NepaliDate implements Comparable<NepaliDate>, Serializable {
     this.ymd = Calendar.fromSerial(serial);
   }
 
+  /**
+   * A date from a serial and the packed fields the caller already has.
+   *
+   * <p>The public factories that start from year, month and day use this so they do not decode the
+   * serial they just computed; {@code shared-check} and the exhaustive test keep the two in step.
+   *
+   * @param serial the serial
+   * @param ymd the same day packed as year, month and day
+   */
+  NepaliDate(int serial, int ymd) {
+    this.serial = serial;
+    this.ymd = ymd;
+  }
+
   private static ZoneId kathmandu() {
     try {
       return ZoneId.of("Asia/Kathmandu");
@@ -84,7 +98,7 @@ public final class NepaliDate implements Comparable<NepaliDate>, Serializable {
     if (error != null) {
       throw errorOf(error, year, month, day);
     }
-    return new NepaliDate(Calendar.toSerial(year, month, day));
+    return new NepaliDate(Calendar.toSerial(year, month, day), Calendar.pack(year, month, day));
   }
 
   /**
@@ -139,7 +153,7 @@ public final class NepaliDate implements Comparable<NepaliDate>, Serializable {
           0,
           "AD " + year + "-" + month + "-" + day + " is outside 1844-04-11..2143-04-15");
     }
-    int serial = Calendar.serialOfCivil(year, month, day);
+    int serial = Calendar.serialOfAd(year, month, day);
     if (serial < CalendarTable.MIN_SERIAL || serial > CalendarTable.MAX_SERIAL) {
       throw new NepDateException(
           NepDateError.OUT_OF_RANGE,
@@ -545,27 +559,34 @@ public final class NepaliDate implements Comparable<NepaliDate>, Serializable {
     if (months < -CalendarTable.MONTHS || months > CalendarTable.MONTHS) {
       throw monthsOutOfRange(months);
     }
-    long target = (long) (year() - CalendarTable.MIN_YEAR) * 12 + monthNumber() - 1 + months;
-    if (target < 0 || target >= CalendarTable.MONTHS) {
+    int startIndex = (year() - CalendarTable.MIN_YEAR) * 12 + monthNumber() - 1;
+    long shifted = startIndex + months;
+    if (shifted < 0 || shifted >= CalendarTable.MONTHS) {
       throw monthsOutOfRange(months);
     }
-    int year = CalendarTable.MIN_YEAR + (int) (target / 12);
-    int month = (int) (target % 12) + 1;
+    int index = (int) shifted;
     int day = day();
-    int length = Calendar.monthLength(year, month);
+    int length = CalendarTable.MONTH_START[index + 1] - CalendarTable.MONTH_START[index];
+    int year = CalendarTable.MIN_YEAR + index / 12;
+    int month = index % 12 + 1;
     if (day <= length) {
-      return new NepaliDate(Calendar.toSerial(year, month, day));
+      return new NepaliDate(
+          CalendarTable.MONTH_START[index] + day - 1, Calendar.pack(year, month, day));
     }
     if (overflow == MonthOverflow.CLAMP) {
-      return new NepaliDate(Calendar.toSerial(year, month, length));
+      return new NepaliDate(
+          CalendarTable.MONTH_START[index] + length - 1, Calendar.pack(year, month, length));
     }
     // Day d of a month too short for it is day (d - length) of the next month, which starts at
-    // MONTH_START[target + 1].
-    int serial = CalendarTable.MONTH_START[(int) target + 1] + day - length - 1;
+    // MONTH_START[index + 1].
+    int serial = CalendarTable.MONTH_START[index + 1] + day - length - 1;
     if (serial > CalendarTable.MAX_SERIAL) {
       throw monthsOutOfRange(months);
     }
-    return new NepaliDate(serial);
+    return new NepaliDate(
+        serial,
+        Calendar.pack(
+            CalendarTable.MIN_YEAR + (index + 1) / 12, (index + 1) % 12 + 1, day - length));
   }
 
   /**

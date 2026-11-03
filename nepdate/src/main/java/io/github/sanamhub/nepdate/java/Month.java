@@ -37,6 +37,9 @@ public enum Month {
   private final String shortEnglish;
   private final String nepali;
 
+  /** Cached because {@link #values()} clones the array on every call. */
+  private static final Month[] VALUES = values();
+
   Month(int number, String english, String shortEnglish, String nepali) {
     this.number = number;
     this.english = english;
@@ -117,6 +120,6 @@ public enum Month {
       throw new NepDateException(
           NepDateError.INVALID_MONTH, 0, "month " + number + " is outside 1..12");
     }
-    return values()[number - 1];
+    return VALUES[number - 1];
   }
 }

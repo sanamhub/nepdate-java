@@ -24,6 +24,11 @@ final class BenchmarkInputs {
   static final io.github.sanamhub.nepdate.NepaliDate[] KOTLIN_PATRO_DATES =
       new io.github.sanamhub.nepdate.NepaliDate[COUNT];
 
+  /**
+   * The patro dates for this port, built once so B7 and B8 measure the lookup, not a date build.
+   */
+  static final NepaliDate[] JAVA_PATRO_DATES = new NepaliDate[COUNT];
+
   static {
     // Date i is the BS date at serial s0 + i * ((s1 - s0) / 63), where s0 is 2000-01-01 and s1 is
     // 2090-12-30. The patro dates use the coverage range in the same way.
@@ -47,6 +52,7 @@ final class BenchmarkInputs {
     for (int i = 0; i < COUNT; i++) {
       PATRO_SERIAL[i] = patroStart + i * patroStep;
       NepaliDate date = NepaliDate.MIN.plusDays(PATRO_SERIAL[i]);
+      JAVA_PATRO_DATES[i] = date;
       KOTLIN_PATRO_DATES[i] = io.github.sanamhub.nepdate.NepaliDate.ofEpochDay(date.toEpochDay());
     }
   }

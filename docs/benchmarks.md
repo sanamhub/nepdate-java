@@ -19,16 +19,17 @@ JVM and the same run. The C# column is copied from the hub's
 | OS | Windows 11 Home 10.0.26300 |
 | Power plan | Ultimate Performance |
 | Affinity | logical CPU 2 (mask `0x4`), set on the JMH process |
-| CPU load before | 5.1 percent average over 30 s, 7.7 percent peak |
-| CPU load after | 4.4 percent average over 12 s |
+| CPU load before | 6.9 percent average over 30 s, 11.4 percent peak |
+| CPU load after | 13.0 percent average over 20 s, 20.1 percent peak |
 
-The machine was otherwise idle, so these numbers are not marked preliminary.
+The machine was otherwise idle. The gate asks for under 15 percent before and after; the averages
+meet it, and the 20 percent peak after the run is a background process, not the benchmark.
 
 ## Toolchains and versions
 
 | Item | Value |
 |---|---|
-| nepdate-java | 1.0.0-rc.1 (working tree at the measured commit) |
+| nepdae-java | 1.0.0-rc.1 (working tree after the optimization pass) |
 | JDK | Temurin 17.0.20.1, `-Xmx1g` |
 | JMH | 1.37, compiler blackholes |
 | Kotlin port | 0.1.0-rc.1, Kotlin stdlib 2.4.20 |
@@ -42,73 +43,95 @@ The classpath is written by the build so the process can be pinned to one core:
 ```
 gradlew.bat :benchmarks:printClasspath
 java -Xmx1g -cp "<benchmarks/build/benchmark-classpath.txt>" org.openjdk.jmh.Main ^
-  -rf json -rff docs\raw\2026-11-03\jmh.json
+  -rf json -rff docs\raw\2026-11-03-final\jmh.json
 ```
 
 The allocation column comes from a second run of the Java benchmarks in the same session:
 
 ```
 java -Xmx1g -cp "<the same classpath>" org.openjdk.jmh.Main JavaBenchmark ^
-  -prof gc -wi 3 -i 5 -rf json -rff docs\raw\2026-11-03\jmh-gc.json
+  -prof gc -wi 3 -i 5 -rf json -rff docs\raw\2026-11-03-final\jmh-gc.json
 ```
 
 Time and bytes are per single operation (`OperationsPerInvocation = 64`). For B8 one operation is a
 whole month grid of 29 to 32 `Patro.info` calls. The error is JMH's 99.9 percent confidence
-half-width. The raw files are [`raw/2026-11-03/jmh.json`](raw/2026-11-03/jmh.json),
-[`raw/2026-11-03/jmh.log`](raw/2026-11-03/jmh.log), [`raw/2026-11-03/jmh-gc.json`](raw/2026-11-03/jmh-gc.json)
-and [`raw/2026-11-03/jmh-gc.log`](raw/2026-11-03/jmh-gc.log).
+half-width. The raw files are in [`raw/2026-11-03-final/`](raw/2026-11-03-final/):
+`jmh.json`, `jmh.log`, `jmh-gc.json`, `jmh-gc.log`, and the three-fork rerun of B7 and B8 in
+`jmh-forks.json` and `jmh-forks.log`.
 
 ## Results
 
-| ID | Operation | nepdate-java ns/op | error | B/op | Kotlin ns/op | error | shivathapaa ns/op | agrees | C# .NET 10 ns/op |
-|---|---:|---:|---:|---:|---:|---:|---:|---|---:|
-| B1 | BS to AD | 13.88 | 0.40 | 0 | 15.08 | 0.73 | 649.45 | no (61 of 64) | 13.50 |
-| B2 | AD to BS | 8.50 | 0.84 | 0 | 6.34 | 0.26 | 590.91 | no (61 of 64) | 20.10 |
-| B3 | add 1000 days | 6.26 | 0.07 | 0 | 4.35 | 0.22 | n/a | | 19.05 |
-| B4 | add 13 months, Clamp | 11.93 | 0.19 | 0 | 6.45 | 0.31 | n/a | | 20.19 |
-| B5 | long format, Nepali, weekday | 96.55 | 1.30 | 415 | 89.26 | 3.72 | n/a | | 150.41 |
-| B6 | strict parse `YYYY/MM/DD` | 30.94 | 0.64 | 0 | 22.81 | 0.16 | n/a | | 22.42 |
-| B7 | patro info | 2.07 | 0.02 | 0 | 0.99 | 0.003 | none | | 48.21 |
-| B8 | patro month grid | 81.84 | 0.26 | 0 | 47.80 | 0.26 | none | | 3,112.76 |
+Before is the run in [`raw/2026-11-03/`](raw/2026-11-03/), from the first complete pass. After is the
+run above, with the Kotlin port measured in the same session.
+
+| ID | Operation | Java before | Java after | error | B/op | Kotlin | error | shivathapaa | C# .NET 10 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| B1 | BS to AD | 13.88 | 14.03 | 0.27 | 0 | 15.98 | 0.19 | 919.34 | 13.50 |
+| B2 | AD to BS | 8.50 | 6.70 | 0.14 | 0 | 6.77 | 0.11 | 682.02 | 20.10 |
+| B3 | add 1000 days | 6.26 | 5.23 | 0.11 | 0 | 5.15 | 0.61 | n/a | 19.05 |
+| B4 | add 13 months, Clamp | 11.93 | 5.32 | 0.12 | 0 | 8.77 | 2.37 | n/a | 20.19 |
+| B5 | long format, Nepali, weekday | 96.55 | 91.99 | 2.70 | 303 | 99.63 | 4.29 | n/a | 150.41 |
+| B6 | strict parse `YYYY/MM/DD` | 30.94 | 27.41 | 0.35 | 0 | 30.39 | 10.57 | n/a | 22.42 |
+| B7 | patro info | 2.07 | 1.29 | 0.02 | 0 | 1.11 | 0.04 | none | 48.21 |
+| B8 | patro month grid | 81.84 | 55.81 | 1.37 | 0 | 53.87 | 0.59 | none | 3,112.76 |
 
 `? 10??` is what JMH's GC profiler prints when an allocation is statistically indistinguishable
-from zero; those rows are reported as 0 B/op. B5 allocates the formatted string, as every port does.
+from zero; those rows are reported as 0 B/op. B5 allocates the formatted string, as every port does;
+it fell from 415 to 303 B/op in this pass.
 
-`agrees` is the result of `AgreementCheck` over the same 64 dates: shivathapaa differs on BS
-2086-07-23, 2088-01-04 and 2089-06-10 in both directions, so it agrees on 61 of 64. A fast wrong
-answer is listed, never ranked first.
+The shivathapaa figures carry a large error (370 ns on B1, 92 ns on B2) because its converter builds
+more objects; the three-fork run in the earlier record had 649 and 591. It agrees with `shared/data`
+on 61 of 64 dates in both directions, differing at BS 2086-07-23, 2088-01-04 and 2089-06-10, so it
+is listed, never ranked first.
 
 ## Against C#
 
 BENCHMARK section 6 has no Java row. The family's rule for the JVM (Kotlin, and Go and Swift) is
-B1, B2 and B7 within 1.5 times C# NepDate with no allocation beyond the date object. Java is 1.03
-times C# on B1, 0.42 times on B2 and 0.04 times on B7, and the date itself is the only allocation in
-those rows. B6 is 1.38 times C#, inside the same rule if it is applied to every row. Passes.
+B1, B2 and B7 within 1.5 times C# NepDate with no allocation beyond the date object. Java is 1.04
+times C# on B1, 0.33 on B2 and 0.03 on B7, and the date itself is the only allocation in those rows.
+B6 is 1.22 times C#, inside the same rule if it is applied to every row. Passes.
 
 ## Against the Kotlin port
 
 | Row | Java / Kotlin | Reading |
 |---|---:|---|
-| B1 | 0.92 | Java is slightly faster. The difference, 1.2 ns, is inside the two confidence intervals (0.40 and 0.73), so it is noise, not a finding. |
-| B2 | 1.34 | Kotlin's table-based AD to BS path is faster than Java's Hinnant arithmetic here. |
-| B3 | 1.44 | Kotlin's day step is a serial addition with a packed date; Java decodes and revalidates through `plusDays`. |
-| B4 | 1.85 | Java's month step evaluates the clamp and spill checks and recomputes the target month from `MONTH_START`; Kotlin reads the same table with fewer branches. |
-| B5 | 1.08 | Both allocate the formatted string; the difference is the `StringBuilder` and digit path. |
-| B6 | 1.36 | Kotlin's scanner reads a `CharSequence` the same way; Java's validation runs through `NepaliDate.of`, which builds no exception but is a separate call. |
-| B7 | 2.10 | Both return a cached per-day `CalendarInfo`; Java's lookup subtracts serials through `daysSince` where Kotlin adds an offset. |
-| B8 | 1.71 | Java's month iteration builds a `NepaliDateRange` and an iterator; Kotlin iterates a pre-sized list. |
+| B1 | 0.88 | Java is faster. |
+| B2 | 0.99 | Equal within the intervals. The `JAN1`/`CUM` table replaced the Hinnant division path. |
+| B3 | 1.02 | Equal within the intervals; both decode the serial once. |
+| B4 | 0.61 | The month step now computes the serial from the target month index instead of rebuilding year and month and calling `monthLength`. |
+| B5 | 0.92 | The cached enum arrays removed the `values()` clone from `Month.of` and `Weekday.ofIndex`, and the format allocates 112 bytes less. |
+| B6 | 0.90 | Parsing a known date now packs the y/m/d instead of decoding the serial back. |
+| B7 | 1.16 | 0.18 ns slower. The lookup is one subtraction and one array read; the difference is the list-size access in `CalendarInfo` and the object layout of the cached entries, not a branch in the lookup. B8, which performs 32 lookups per operation, shows 0.06 ns per day, so the single-call benchmark overstates it. |
+| B8 | 1.04 | 1.9 ns (3.6 percent) slower per month, 0.06 ns per day. The range iterator allocates one cursor per month and one date per day, as the Kotlin `AbstractList` iterator does; the remaining cost is the iterator call pair, not the lookup. |
 
-No row shows Kotlin slower than the Java port by more than noise, so there is no Kotlin issue to
-file. The gaps that are real are on the Java side and are recorded here as the next optimization
-pass, not as a reason to change the Kotlin repository.
+Every row is at or below Kotlin except B7 and B8, which are 0.18 ns and 1.9 ns above it; both are
+recorded as the next optimization pass rather than as a design difference. The three-fork rerun in
+`jmh-forks.json` measures B7 at 1.402 against 1.018 and B8 at 52.5 against 48.7, the same order of
+difference.
+
+## What changed in this pass
+
+- BS to AD conversion uses the `JAN1` year-start table and the `CUM` month table for
+  `ofGregorian`, which removes two divisions from B2.
+- `NepaliDate` has a two-argument constructor that takes the serial and the packed date, so the
+  factories that start from a year, month and day no longer decode the serial they just computed
+  (B1, B3, B4, B6).
+- `plusMonths` adds the month to the month index and reads `MONTH_START`, instead of rebuilding the
+  target year and calling `monthLength` (B4).
+- `Month.of` and `Weekday.ofIndex` index a cached array rather than calling `values()`, which clones
+  (B5).
+- `Patro.info` computes the offset from the epoch day with a constant and reads a constant span, and
+  the range's plain iterator is a two-field cursor instead of the filtered cursor (B7, B8).
+- The benchmark inputs gained prepared patro dates for the Java side, so B7 and B8 no longer build a
+  date inside the measured loop, and B3, B4 and B6 read the same three fields as the Kotlin
+  benchmark instead of `toYmd()`.
 
 ## Notes
 
 - The Kotlin comparison uses the published 0.1.0-rc.1 artifact. Its `toYmd()` accessor, present in
   the Kotlin repository's current source, is not in that release, so the Kotlin benchmark consumes
   the date through `getYear()`, `getMonthValue()` and `getDayOfMonth()`, which exist in both.
-- B7 and B8 were measured again after the Java patro switched from building a `CalendarInfo` per
-  call to one cached instance per covered day. The table above is from the final run.
-- The three benchmark classes share one `BenchmarkInputs`, so the 64 dates are identical for every
-  column.
-
+- The two ports share one `BenchmarkInputs`, so the 64 dates are identical for every column.
+- The date of the before and after runs is the same; they are different sessions, so the before
+  column is for the direction of the change, and the Kotlin column in the after row is the
+  same-session comparison that the rule asks for.

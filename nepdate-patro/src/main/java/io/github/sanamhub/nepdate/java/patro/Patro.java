@@ -26,6 +26,14 @@ public final class Patro {
   /** One shared answer per day from {@code FIRST_SERIAL} to {@code LAST_SERIAL}. */
   private static final CalendarInfo[] BY_DAY = buildByDay();
 
+  /** Number of covered days, and the epoch-day shift of the first one. */
+  private static final int SPAN = PatroTable.LAST_SERIAL - PatroTable.FIRST_SERIAL + 1;
+
+  /** Days from the serial epoch (BS 1901-01-01) to 1970-01-01, as in the core's epoch constant. */
+  private static final int SERIAL_OF_UNIX_EPOCH = 45920;
+
+  private static final int EPOCH_OFFSET = PatroTable.FIRST_SERIAL - SERIAL_OF_UNIX_EPOCH;
+
   /**
    * Everything the patro knows about a day.
    *
@@ -36,8 +44,8 @@ public final class Patro {
    * @return the day's tithi, holiday flag and events
    */
   public static CalendarInfo info(NepaliDate date) {
-    int offset = serialOf(date) - PatroTable.FIRST_SERIAL;
-    return offset >= 0 && offset < BY_DAY.length ? BY_DAY[offset] : EMPTY;
+    int offset = (int) date.toEpochDay() - EPOCH_OFFSET;
+    return offset >= 0 && offset < SPAN ? BY_DAY[offset] : EMPTY;
   }
 
   /**
@@ -97,10 +105,6 @@ public final class Patro {
       events.add(names[PatroTable.EVENT_INDEX[i]]);
     }
     return events;
-  }
-
-  private static int serialOf(NepaliDate date) {
-    return (int) date.daysSince(NepaliDate.MIN);
   }
 
   private static Named[] buildNames() {

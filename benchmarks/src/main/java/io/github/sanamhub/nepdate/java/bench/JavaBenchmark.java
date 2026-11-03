@@ -64,7 +64,7 @@ public class JavaBenchmark {
                   BenchmarkInputs.BS_MONTH[i],
                   BenchmarkInputs.BS_DAY[i])
               .plusDays(1000);
-      sum += date.toYmd();
+      sum += date.year() + date.monthNumber() + date.day();
     }
     return sum;
   }
@@ -80,7 +80,7 @@ public class JavaBenchmark {
                   BenchmarkInputs.BS_MONTH[i],
                   BenchmarkInputs.BS_DAY[i])
               .plusMonths(13, MonthOverflow.CLAMP);
-      sum += date.toYmd();
+      sum += date.year() + date.monthNumber() + date.day();
     }
     return sum;
   }
@@ -103,7 +103,7 @@ public class JavaBenchmark {
   public int b6StrictParse() {
     int sum = 0;
     for (int i = 0; i < BenchmarkInputs.COUNT; i++) {
-      sum += NepaliDate.parse(BenchmarkInputs.TEXT[i]).toYmd();
+      sum += NepaliDate.parse(BenchmarkInputs.TEXT[i]).year();
     }
     return sum;
   }
@@ -113,7 +113,7 @@ public class JavaBenchmark {
   public int b7PatroInfo() {
     int sum = 0;
     for (int i = 0; i < BenchmarkInputs.COUNT; i++) {
-      CalendarInfo info = Patro.info(NepaliDate.MIN.plusDays(BenchmarkInputs.PATRO_SERIAL[i]));
+      CalendarInfo info = Patro.info(BenchmarkInputs.JAVA_PATRO_DATES[i]);
       sum += info.events().size() + (info.isPublicHoliday() ? 1 : 0);
     }
     return sum;
@@ -124,7 +124,7 @@ public class JavaBenchmark {
   public int b8PatroMonthGrid() {
     int sum = 0;
     for (int i = 0; i < BenchmarkInputs.COUNT; i++) {
-      NepaliDate date = NepaliDate.MIN.plusDays(BenchmarkInputs.PATRO_SERIAL[i]);
+      NepaliDate date = BenchmarkInputs.JAVA_PATRO_DATES[i];
       NepaliDateRange month = NepaliDateRange.forMonth(date.year(), date.monthNumber());
       for (NepaliDate day : month) {
         CalendarInfo info = Patro.info(day);

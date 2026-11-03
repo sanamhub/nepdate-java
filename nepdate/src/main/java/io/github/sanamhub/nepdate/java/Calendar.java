@@ -128,21 +128,18 @@ final class Calendar {
   }
 
   /**
-   * The days from 1970-01-01 to a real proleptic Gregorian date (Howard Hinnant, days_from_civil).
+   * The packed Gregorian date of a serial.
    *
-   * @param year 1 or more
-   * @param month 1 to 12
-   * @param day 1 to the Gregorian month length
-   * @return the epoch day
+   * <p>The Hinnant arithmetic is used here rather than the {@code JAN1} table: the three Gregorian
+   * getters ask for the same serial, and the JIT can common-subexpression-eliminate this pure
+   * arithmetic across the calls, which a table load cannot do. {@link #serialOfAd} uses the table
+   * because it starts from three numbers, not from a serial.
+   *
+   * @param serial 0 to 109211
+   * @return the packed Gregorian year, month and day
    */
-  static int daysFromCivil(int year, int month, int day) {
-    int y = month <= 2 ? year - 1 : year;
-    int era = y / 400;
-    int yearOfEra = y - era * 400;
-    int marchMonth = (month + 9) % 12;
-    int dayOfYear = (153 * marchMonth + 2) / 5 + day - 1;
-    int dayOfEra = yearOfEra * 365 + yearOfEra / 4 - yearOfEra / 100 + dayOfYear;
-    return era * 146097 + dayOfEra - 719468;
+  static int packedCivilOf(int serial) {
+    return packedCivilFromDays(serial + CalendarTable.EPOCH_UNIX_DAYS);
   }
 
   /**
@@ -170,23 +167,20 @@ final class Calendar {
   /**
    * The serial of a real Gregorian date.
    *
+   * <p>The caller has checked the date and its range; {@code JAN1} holds the year start, so this is
+   * two table reads instead of the divisions of a civil-date algorithm.
+   *
    * @param year 1844 to 2143
    * @param month 1 to 12
    * @param day 1 to the Gregorian month length
    * @return the serial
    */
-  static int serialOfCivil(int year, int month, int day) {
-    return daysFromCivil(year, month, day) - CalendarTable.EPOCH_UNIX_DAYS;
-  }
-
-  /**
-   * The packed Gregorian date of a serial.
-   *
-   * @param serial 0 to 109211
-   * @return the packed Gregorian year, month and day
-   */
-  static int packedCivilOf(int serial) {
-    return packedCivilFromDays(serial + CalendarTable.EPOCH_UNIX_DAYS);
+  static int serialOfAd(int year, int month, int day) {
+    int base = isGregorianLeap(year) ? CalendarTable.LEAP_BASE : 0;
+    return CalendarTable.JAN1[year - CalendarTable.JAN1_BASE_YEAR]
+        + CalendarTable.CUM[base + month - 1]
+        + day
+        - 1;
   }
 
   /**

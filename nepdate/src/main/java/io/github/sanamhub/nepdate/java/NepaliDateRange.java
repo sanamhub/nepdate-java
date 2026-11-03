@@ -423,7 +423,31 @@ public final class NepaliDateRange implements Iterable<NepaliDate> {
    */
   @Override
   public Iterator<NepaliDate> iterator() {
-    return new Cursor(first, last, 1, ALL, false);
+    return new AllCursor(first, last);
+  }
+
+  /** Every day in order, the form the for-each loop uses. */
+  private static final class AllCursor implements Iterator<NepaliDate> {
+    private final int last;
+    private int next;
+
+    AllCursor(int first, int last) {
+      this.next = first;
+      this.last = last;
+    }
+
+    @Override
+    public boolean hasNext() {
+      return next <= last;
+    }
+
+    @Override
+    public NepaliDate next() {
+      if (next > last) {
+        throw new NoSuchElementException();
+      }
+      return NepaliDate.ofSerial(next++);
+    }
   }
 
   private static Stream<NepaliDate> stream(Iterator<NepaliDate> iterator) {
@@ -509,6 +533,9 @@ public final class NepaliDateRange implements Iterable<NepaliDate> {
     }
 
     private void advance() {
+      if (mode == ALL) {
+        return;
+      }
       while (next <= last && !accept((int) next)) {
         next += step;
       }
@@ -530,7 +557,7 @@ public final class NepaliDateRange implements Iterable<NepaliDate> {
 
     @Override
     public NepaliDate next() {
-      if (!hasNext()) {
+      if (next > last) {
         throw new NoSuchElementException();
       }
       NepaliDate date = NepaliDate.ofSerial((int) next);

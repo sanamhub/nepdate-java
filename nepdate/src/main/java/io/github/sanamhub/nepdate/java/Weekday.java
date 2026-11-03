@@ -32,6 +32,9 @@ public enum Weekday {
   private final String shortNepali;
   private final DayOfWeek dayOfWeek;
 
+  /** Cached because {@link #values()} clones the array on every call. */
+  private static final Weekday[] VALUES = values();
+
   Weekday(
       int index,
       String english,
@@ -132,6 +135,6 @@ public enum Weekday {
     if (index < 0 || index > 6) {
       throw new IllegalArgumentException("weekday index " + index + " is outside 0..6");
     }
-    return values()[index];
+    return VALUES[index];
   }
 }
