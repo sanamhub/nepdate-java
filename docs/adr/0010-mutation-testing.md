@@ -33,9 +33,12 @@ it cannot run on every push.
 
 ## Consequences
 
-- A change to a branch in the core is checked for test strength within a day.
+- A change to a branch in the core is checked for test strength within a day, and a pull request
+  that changes the core or its tests runs the gate before it merges, so a regression does not wait
+  for the weekly job or first show at a tag.
 - The threshold is a repository value, visible in `gradle.properties` and in the report.
-- The mutation run is not a per-push gate; `scripts/ci.sh` says so.
+- The mutation run is not part of `scripts/ci.sh`, so the local one-command gate stays a few
+  minutes; the workflow has the list of paths that trigger it.
 
 ## Alternatives considered
 

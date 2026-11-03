@@ -1,8 +1,19 @@
-# Mutation testing (ADR-0010). It runs weekly and by hand, never on a pull request: a full run
-# takes minutes because every mutant runs the deterministic core tests.
+# Mutation testing (ADR-0010). It runs on a pull request that changes the core or its tests, weekly,
+# and by hand. The per-row vector classes are excluded from the PIT run, so a pull request run takes
+# a few minutes rather than the full suite repeated for every mutant.
 name: mutation
 
 on:
+  pull_request:
+    paths:
+      - "nepdate/src/main/**"
+      - "nepdate/src/test/**"
+      - "nepdate/build.gradle.kts"
+      - "scripts/mutation.sh"
+      - "scripts/test-mutation.sh"
+      - "gradle.properties"
+      - "gradle/libs.versions.toml"
+      - ".github/workflows/mutation.yml"
   schedule:
     - cron: "17 4 * * 3"
   workflow_dispatch:
