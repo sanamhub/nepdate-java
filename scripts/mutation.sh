@@ -18,6 +18,10 @@ fi
 
 log="$(mktemp)"
 trap 'rm -f "$log"' EXIT
+# The controls cannot run PIT, so they hand the console cross-check a PIT line this way.
+if [ -n "${NEPDATE_MUTATION_CONSOLE:-}" ]; then
+  cp "$NEPDATE_MUTATION_CONSOLE" "$log"
+fi
 
 status=0
 if [ "$cached" = "1" ]; then
@@ -75,14 +79,15 @@ fi
 score=$((detected * 100 / total))
 
 # PIT prints this line on a real run. A restored-from-cache report prints nothing, so the XML is
-# the source of truth and the console is a cross-check when it is present.
+# the source of truth and the console is a cross-check when it is present. PIT rounds its printed
+# percentage while the gate floors its own (803/823 prints as 98% and floors to 97%), so the counts
+# are the only part both agree on and the only part compared.
 line="$(grep -E '^>> Generated [0-9]+ mutations Killed [0-9]+ \([0-9]+%\)$' "$log" | tail -n 1 || true)"
 if [ -n "$line" ]; then
-  read -r console_total console_detected console_score <<< "$(printf '%s\n' "$line" |
+  read -r console_total console_detected _ <<< "$(printf '%s\n' "$line" |
     sed -E 's/^>> Generated ([0-9]+) mutations Killed ([0-9]+) \(([0-9]+)%\)$/\1 \2 \3/')"
-  if [ "$console_total" -ne "$total" ] || [ "$console_detected" -ne "$detected" ] ||
-    [ "$console_score" -ne "$score" ]; then
-    echo "mutation: XML report (${detected}/${total}, ${score}%) disagrees with PIT (${console_detected}/${console_total}, ${console_score}%)"
+  if [ "$console_total" -ne "$total" ] || [ "$console_detected" -ne "$detected" ]; then
+    echo "mutation: XML report (${detected}/${total}) disagrees with PIT (${console_detected}/${console_total})"
     exit 1
   fi
 fi

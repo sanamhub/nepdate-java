@@ -28,10 +28,10 @@ write_report() {
 }
 
 expect_failure() {
-  local report="$1" message="$2" output status
+  local report="$1" message="$2" console="${3:-}" output status
   set +e
   output="$(NEPDATE_MUTATION_CACHED=1 NEPDATE_MUTATION_REPORT="$report" \
-    "$script_dir/mutation.sh" 2>&1)"
+    NEPDATE_MUTATION_CONSOLE="$console" "$script_dir/mutation.sh" 2>&1)"
   status=$?
   set -e
   if [ "$status" -ne 1 ]; then
@@ -69,6 +69,20 @@ if [ "$threshold" -gt 0 ] && [ "$threshold" -lt 100 ]; then
     expect_failure "$tmp/low.xml" "mutation: score ${score}% is below threshold ${threshold}%"
   fi
 fi
+
+# PIT rounds its printed percentage and the gate floors the same ratio: 803 of 823 prints as 98%
+# and floors to 97%, and the gate must accept that. The counts still have to match.
+write_report 803 0 20 0 "$tmp/rounded.xml"
+printf '%s\n' '>> Generated 823 mutations Killed 803 (98%)' > "$tmp/rounded.log"
+if ! NEPDATE_MUTATION_CACHED=1 NEPDATE_MUTATION_REPORT="$tmp/rounded.xml" \
+  NEPDATE_MUTATION_CONSOLE="$tmp/rounded.log" "$script_dir/mutation.sh" > "$tmp/rounded.out" 2>&1; then
+  printf 'expected the rounded console percentage to pass\n%s\n' "$(cat "$tmp/rounded.out")" >&2
+  exit 1
+fi
+
+printf '%s\n' '>> Generated 823 mutations Killed 802 (97%)' > "$tmp/count.log"
+expect_failure "$tmp/rounded.xml" \
+  "mutation: XML report (803/823) disagrees with PIT (802/823)" "$tmp/count.log"
 
 printf "<mutations><mutation status='KILLED'></mutations>\n" > "$tmp/malformed.xml"
 expect_failure "$tmp/malformed.xml" "mutation: report is not well-formed XML"
