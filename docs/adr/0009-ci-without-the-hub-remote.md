@@ -18,9 +18,11 @@ The PHP port hit the same situation and documented it rather than weakening the 
    the same on all nine cells; nothing is skipped on an operating system.
 3. **`shared-check` calls the hub's reusable workflow pinned to a commit.** It compares `shared/`
    with the hub commit in `shared/VERSION` and checks this port's version against that commit's
-   `spec/versions.json`. Until the hub branch is merged the job is the one red check; after the
+   `spec/versions.json`. A port with no entry there may declare a later line (hub ADR-0008), so the
+   job is green before the 1.0 line moves. The hub branch merges at the 1.0 release; after that
    merge a shared-sync pull request moves `shared/VERSION` to the release-state commit, and only
-   then does the version check see the 1.0 line. The runbook says no tag is cut before it is green.
+   then does the version check compare against the 1.0 line. The runbook puts both steps in the
+   release window and says no tag is cut before the job is green.
 4. **The workflows are pinned by commit SHA** with the version in a comment, top-level
    `permissions: contents: read`, raised per job only where needed. No `pull_request_target`, no
    secrets in a job that runs a pull request's code.

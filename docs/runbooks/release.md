@@ -26,14 +26,18 @@ together, with the same version. The version lives in `gradle.properties` and no
    Confirm that both new artifact IDs can be published under it; there is no separate pending
    publisher for Maven Central, unlike the registries with trusted publishing.
 6. **The label.** Create the `published-check` label used by `verify-published.yml`.
-7. **The hub branch.** Merge the hub branch that adds Java to `spec/versions.json`,
-   `spec/packages.json`, `spec/API.md` and the site. `shared-check` is the one red job until then and
-   no tag is cut before it is green.
-8. **Sync after the hub merge.** The reusable `shared-check` reads the hub at the commit in
-   `shared/VERSION`, and its version check uses that commit's `spec/versions.json`. Merge the hub
-   branch, run the `shared-sync` workflow (or `py tools/shared_sync.py .`), and merge its pull
-   request, so `shared/VERSION` names the hub commit that has the `java` entry and the 1.0 line.
-   Until that happens the job reports `java 1.0.0-rc.1: major.minor 1.0 is not the hub line 0.2`.
+7. **The hub branch merges at the 1.0 release.** The branch that adds Java to `spec/versions.json`,
+   `spec/packages.json`, `spec/API.md` and the site also moves the line to `1.0`. Merge it in the
+   release window, together with the line move, not before: moving the line earlier would fail the
+   ten ports that are on `0.2.0-rc.1`. `shared-check` on this repository is green before that,
+   because a port with no entry may declare a later line (hub ADR-0008).
+8. **At the release, merge the hub branch and then sync.** The reusable `shared-check` reads the
+   hub at the commit in `shared/VERSION`, and its version check uses that commit's
+   `spec/versions.json`. After the hub branch merges, run the `shared-sync` workflow (or
+   `py tools/shared_sync.py .`) and merge its pull request, so `shared/VERSION` names the hub
+   commit with the `java` entry and the 1.0 line. Then tag. Without the sync the job still reads
+   `0.2` from the old `VERSION` and reports `java 1.0.0-rc.1: major.minor 1.0 is not the hub line
+   0.2`.
 
 ## Every release
 
