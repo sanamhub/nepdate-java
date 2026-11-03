@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SpotBugs runs on every class of the two published modules except the generated tables, which are
+  data written by :codegen and checked byte for byte by :codegen:checkTables and by the count tests
+  in :nepdate-patro. Nothing else is excluded: a finding is fixed, and a false positive gets a
+  reason in docs/mutation/equivalent.md only when a test cannot express it.
+-->
+<FindBugsFilter>
+  <Match>
+    <Class name="io.github.sanamhub.nepdate.java.CalendarTable" />
+  </Match>
+  <Match>
+    <Class name="io.github.sanamhub.nepdate.java.patro.PatroTable" />
+  </Match>
+</FindBugsFilter>

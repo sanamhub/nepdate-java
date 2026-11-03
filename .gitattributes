@@ -1,0 +1,24 @@
+# Normalise every text file to LF in the repository, whatever the working tree uses.
+* text=auto eol=lf
+
+# Windows batch files are the one exception: cmd expects CRLF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.sh text eol=lf
+
+# The Gradle wrapper jar and the images are binary.
+*.jar binary
+*.png binary
+
+# Development files that a source export does not need. The published artifacts are built by
+# Gradle and contain only the module sources and classes, so this list is about the GitHub
+# tarball, not about what Maven Central receives.
+/.github export-ignore
+/.gitignore export-ignore
+/.gitattributes export-ignore
+/.editorconfig export-ignore
+/benchmarks export-ignore
+/codegen export-ignore
+/docs export-ignore
+/scripts export-ignore
+/shared export-ignore

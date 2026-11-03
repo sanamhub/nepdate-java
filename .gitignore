@@ -1,0 +1,32 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Local toolchains and caches
+.jdk/
+.java-version
+
+# IDE
+/.idea/
+/.vscode/
+/.vs/
+*.iml
+*.ipr
+*.iws
+out/
+
+# Test tooling state
+.jqwik-database
+
+# Local run logs
+*-local.log
+hs_err_pid*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local notes, never committed (AGENTS.md and CLAUDE.md are working notes)
+/AGENTS.md
+/CLAUDE.md

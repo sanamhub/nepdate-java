@@ -1,0 +1,34 @@
+# Every version is pinned. ADR-0001 records the release date each one was chosen on; a new
+# dependency must be at least 14 days old.
+[versions]
+junit = "5.14.4"
+jqwik = "1.10.1"
+jmh = "1.37"
+jspecify = "1.0.0"
+spotbugs-plugin = "6.5.13"
+spotbugsVersion = "4.10.5"
+spotless = "8.10.4"
+googleJavaFormat = "1.28.0"
+jacoco = "0.8.15"
+maven-publish = "0.37.0"
+mutation-gradle-plugin = "1.19.0"
+kotlin-port = "0.1.0-rc.1"
+shivathapaa = "3.3.0"
+
+[libraries]
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+jqwik = { module = "net.jqwik:jqwik", version.ref = "jqwik" }
+jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
+jmh-core = { module = "org.openjdk.jmh:jmh-core", version.ref = "jmh" }
+jmh-generator = { module = "org.openjdk.jmh:jmh-generator-annprocess", version.ref = "jmh" }
+kotlin-nepdate = { module = "io.github.sanamhub:nepdate", version.ref = "kotlin-port" }
+kotlin-nepdate-patro = { module = "io.github.sanamhub:nepdate-patro", version.ref = "kotlin-port" }
+shivathapaa-core = { module = "io.github.shivathapaa:nepali-date-picker-core-jvm", version.ref = "shivathapaa" }
+
+[plugins]
+spotbugs = { id = "com.github.spotbugs", version.ref = "spotbugs-plugin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }
+pitest = { id = "info.solidsoft.pitest", version.ref = "mutation-gradle-plugin" }
