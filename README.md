@@ -16,12 +16,9 @@ Bikram Sambat (Nepali calendar) dates for Java: conversion to and from Gregorian
 an explicit overflow mode, formatting and parsing in English and Nepali, ranges and fiscal years.
 Part of the NepDate family: the shared data and specification live in the hub
 [`sanamhub/nepdate`](https://github.com/sanamhub/nepdate); the C# original is
-[NepDate](https://github.com/RajuPrasai/NepDate) by Raju Prasai.
+[NepDate](https://github.com/RajuPrasai/NepDate).
 
-> **Status:** 1.0.0-rc.1, the release candidate for Java on Maven Central. The API is listed in
-> [docs/API.md](https://github.com/sanamhub/nepdate-java/blob/main/docs/API.md) and is stable from
-> 1.0 (hub ADR-0009). Patro data (tithi, holidays, events) is informational, not an official
-> calendar.
+The API is listed in [docs/API.md](https://github.com/sanamhub/nepdate-java/blob/main/docs/API.md) and is stable from 1.0 ([ADR-0009](https://github.com/sanamhub/nepdate/blob/main/docs/adr/0009-what-1.0-promises.md)). Tithi, public holidays and events are informational, not an official calendar.
 
 Two artifacts, released together with the same version and one tag:
 
@@ -310,6 +307,14 @@ data is informational, not an official calendar.
 JMH B1 to B8 for this port and for the published Kotlin artifact, in the same JVM, same machine and
 same run, are in [docs/benchmarks.md](https://github.com/sanamhub/nepdate-java/blob/main/docs/benchmarks.md).
 
+<!-- family:start -->
+## NepDate in other languages
+
+The same calendar, with the same answers, for [C#](https://github.com/RajuPrasai/NepDate), [TypeScript](https://github.com/sanamhub/nepdate-typescript), [Python](https://github.com/sanamhub/nepdate-python), [PHP](https://github.com/sanamhub/nepdate-php), [Dart](https://github.com/sanamhub/nepdate-dart), [Kotlin](https://github.com/sanamhub/nepdate-kotlin), [Go](https://github.com/sanamhub/nepdate-go), [Swift](https://github.com/sanamhub/nepdate-swift), [C++](https://github.com/sanamhub/nepdate-cpp), [C](https://github.com/sanamhub/nepdate-c), [Rust](https://github.com/sanamhub/nepdate-rust), [Ruby](https://github.com/sanamhub/nepdate-ruby), [Zig](https://github.com/sanamhub/nepdate-zig). Every library is listed at [nepdate.com](https://nepdate.com/).
+
+For people rather than code: [MitiBar](https://nepdate.com/mitibar/) puts today's date on the Windows, macOS and Linux desktop, [patro.nepdate.com](https://patro.nepdate.com/) is the calendar on the web, and NepDate for Android and iOS is coming soon.
+<!-- family:end -->
+
 ## Contributing
 
 See [CONTRIBUTING.md](https://github.com/sanamhub/nepdate-java/blob/main/CONTRIBUTING.md). Run
@@ -318,8 +323,7 @@ macOS and Windows.
 
 ## Credit
 
-The calendar data and algorithm come from C# [NepDate](https://github.com/RajuPrasai/NepDate) by
-Raju Prasai, under the MIT licence. The NepDate family and this port were written by
+The calendar data and algorithm come from C# [NepDate](https://github.com/RajuPrasai/NepDate), under the MIT licence. The NepDate family and this port were written by
 [Sanam Pakuwal](https://github.com/sanamhub).
 
 ## License
