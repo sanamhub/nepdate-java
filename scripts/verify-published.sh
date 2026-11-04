@@ -15,7 +15,9 @@ fi
 
 base="https://repo1.maven.org/maven2/io/github/sanamhub"
 tmp="$(mktemp -d)"
-trap 'rm -rf "$tmp"' EXIT
+# Cleanup is not the check: a runner that cannot remove its own temporary directory must not turn a
+# successful install into a failed release gate.
+trap 'rm -rf "$tmp" || true' EXIT
 
 for artifact in nepdate-java nepdate-java-patro; do
   for suffix in .pom .jar .jar.asc; do
