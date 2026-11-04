@@ -15,9 +15,7 @@ fi
 
 base="https://repo1.maven.org/maven2/io/github/sanamhub"
 tmp="$(mktemp -d)"
-# Cleanup is not the check: a runner that cannot remove its own temporary directory must not turn a
-# successful install into a failed release gate.
-trap 'rm -rf "$tmp" || true' EXIT
+trap 'rm -rf "$tmp"' EXIT
 
 for artifact in nepdate-java nepdate-java-patro; do
   for suffix in .pom .jar .jar.asc; do
@@ -38,10 +36,18 @@ if [ "$mode" = "--metadata" ]; then
 fi
 
 case "$(uname -s)" in
-  MINGW*|MSYS*|CYGWIN*) sep=';' ;;
-  *) sep=':' ;;
+  MINGW*|MSYS*|CYGWIN*)
+    sep=';'
+    # Git Bash hands javac an MSYS path in -cp, which Windows Java reads as C:\tmp and cannot find.
+    # Convert the temp directory once, and pass every classpath entry as a Windows path.
+    win_tmp="$(cygpath -w "$tmp")"
+    ;;
+  *)
+    sep=':'
+    win_tmp="$tmp"
+    ;;
 esac
-classpath="$tmp/nepdate-java.jar${sep}$tmp/nepdate-java-patro.jar"
+classpath="$win_tmp/nepdate-java.jar${sep}$win_tmp/nepdate-java-patro.jar"
 
 cat > "$tmp/Check.java" <<'JAVA'
 import io.github.sanamhub.nepdate.java.NepaliDate;
@@ -72,6 +78,6 @@ public final class Check {
 }
 JAVA
 
-javac -cp "$classpath" -d "$tmp" "$tmp/Check.java"
-java -cp "$tmp${sep}$classpath" Check
+javac -cp "$classpath" -d "$win_tmp" "$win_tmp/Check.java"
+java -cp "$win_tmp${sep}$classpath" Check
 echo "verify-published: $version ok"
