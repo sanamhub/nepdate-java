@@ -8,6 +8,10 @@ repository joins at `1.0.0-rc.1` with the other ports
 
 ## [Unreleased]
 
+## [1.0.0-rc.1] - 2026-11-04
+
+The API is stable from 1.0 (hub ADR-0009). This is the first release of the Java port.
+
 ### Added
 
 - The `io.github.sanamhub:nepdate-java` artifact: Bikram Sambat dates from 1901-01-01 to
