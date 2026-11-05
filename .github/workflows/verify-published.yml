@@ -70,7 +70,8 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 30
+    # Long enough for the three-hour Central wait before the install starts.
+    timeout-minutes: 190
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -79,6 +80,31 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
+      # A release called this workflow seconds after the upload finished, while Central still
+      # answered 404. Wait for both POMs before the install, and leave the weekly and metadata
+      # jobs alone: they check versions that are already served.
+      - name: Wait for Maven Central to serve both POMs
+        env:
+          VERSION: ${{ needs.resolve.outputs.version }}
+        run: |
+          set -euo pipefail
+          deadline=$((SECONDS + 3 * 60 * 60))
+          for artifact in nepdate-java nepdate-java-patro; do
+            url="https://repo1.maven.org/maven2/io/github/sanamhub/$artifact/$VERSION/$artifact-$VERSION.pom"
+            while true; do
+              code="$(curl -sS -L -o /dev/null -w '%{http_code}' "$url" || true)"
+              if [ "$code" = "200" ]; then
+                echo "$url is served"
+                break
+              fi
+              if [ "$SECONDS" -ge "$deadline" ]; then
+                echo "::error::$url returned $code after three hours; Maven Central has not served the release"
+                exit 1
+              fi
+              echo "waiting for $url (HTTP $code)"
+              sleep 60
+            done
+          done
       - name: Install and check the published artifacts
         env:
           VERSION: ${{ needs.resolve.outputs.version }}
