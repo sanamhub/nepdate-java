@@ -1,0 +1,2 @@
+main run idle gate: avg=4.1 max=8.8; load during: n=284 total avg=9.6 peak=15.3 | other-cpus avg=3.6 peak=10.0
+allocation run idle gate: avg=4.7 max=8.1
