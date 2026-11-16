@@ -15,7 +15,7 @@ dependencies {
 // tests are the ones PIT exercises. The two versions are pinned here because the plugin extension
 // shadows the version catalog inside its block; Dependabot bumps this file too.
 pitest {
-    pitestVersion.set("1.30.1")
+    pitestVersion.set("1.30.2")
     junit5PluginVersion.set("1.2.3")
     targetClasses.set(setOf("io.github.sanamhub.nepdate.java.*"))
     targetTests.set(setOf("io.github.sanamhub.nepdate.java.*"))
