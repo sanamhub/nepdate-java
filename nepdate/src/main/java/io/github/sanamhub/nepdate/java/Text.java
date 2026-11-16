@@ -15,7 +15,62 @@ final class Text {
 
   private static final char DEVANAGARI_ZERO = '\u0966';
 
+  /**
+   * Room for the longest long form in either language: the longest weekday and month names, the two
+   * {@code ", "}, the space, a two-digit day and a four-digit year.
+   */
+  private static final int LONG_CHARS = longestWeekday() + longestMonth() + 11;
+
   private Text() {}
+
+  private static int longestWeekday() {
+    int longest = 0;
+    for (Weekday weekday : Weekday.values()) {
+      longest = Math.max(longest, weekday.name(Language.ENGLISH).length());
+      longest = Math.max(longest, weekday.name(Language.NEPALI).length());
+    }
+    return longest;
+  }
+
+  private static int longestMonth() {
+    int longest = 0;
+    for (Month month : Month.values()) {
+      longest = Math.max(longest, month.name(Language.ENGLISH).length());
+      longest = Math.max(longest, month.name(Language.NEPALI).length());
+    }
+    return longest;
+  }
+
+  private static char zeroOf(Language language) {
+    return language == Language.NEPALI ? DEVANAGARI_ZERO : '0';
+  }
+
+  /** Writes a number below 100, as two digits when it has two or {@code pad} asks for them. */
+  private static int writeField(char[] buffer, int position, int value, boolean pad, char zero) {
+    int at = position;
+    if (pad || value >= 10) {
+      buffer[at++] = (char) (zero + value / 10);
+    }
+    buffer[at++] = (char) (zero + value % 10);
+    return at;
+  }
+
+  /** Writes a four-digit year; every supported year has four digits. */
+  private static int writeYear(char[] buffer, int position, int year, char zero) {
+    int high = year / 100;
+    int low = year % 100;
+    buffer[position] = (char) (zero + high / 10);
+    buffer[position + 1] = (char) (zero + high % 10);
+    buffer[position + 2] = (char) (zero + low / 10);
+    buffer[position + 3] = (char) (zero + low % 10);
+    return position + 4;
+  }
+
+  private static int writeName(char[] buffer, int position, String name) {
+    int length = name.length();
+    name.getChars(0, length, buffer, position);
+    return position + length;
+  }
 
   /**
    * Appends a non-negative number with at least {@code width} digits, zero padded.
@@ -69,8 +124,28 @@ final class Text {
    */
   static String shortString(
       NepaliDate date, DateOrder order, Separator separator, boolean pad, Language language) {
-    return appendShort(new StringBuilder(SHORT_CAPACITY), date, order, separator, pad, language)
-        .toString();
+    // One array filled in place: a StringBuilder starts in Latin-1 and copies itself on the first
+    // Devanagari digit, and checks its capacity on every append.
+    char[] buffer = new char[SHORT_CAPACITY];
+    char zero = zeroOf(language);
+    char between = separator.character();
+    // The constant's name spells its field order.
+    String fields = order.name();
+    int length = 0;
+    for (int i = 0; i < 3; i++) {
+      if (i > 0) {
+        buffer[length++] = between;
+      }
+      char field = fields.charAt(i);
+      if (field == 'Y') {
+        length = writeYear(buffer, length, date.year(), zero);
+      } else if (field == 'M') {
+        length = writeField(buffer, length, date.monthNumber(), pad, zero);
+      } else {
+        length = writeField(buffer, length, date.day(), pad, zero);
+      }
+    }
+    return new String(buffer, 0, length);
   }
 
   /**
@@ -141,7 +216,23 @@ final class Text {
    * @return the long form
    */
   static String longString(NepaliDate date, LongDateOptions options, Language language) {
-    return appendLong(new StringBuilder(LONG_CAPACITY), date, options, language).toString();
+    char[] buffer = new char[LONG_CHARS];
+    char zero = zeroOf(language);
+    int length = 0;
+    if (options.weekday()) {
+      length = writeName(buffer, length, date.weekday().name(language));
+      buffer[length++] = ',';
+      buffer[length++] = ' ';
+    }
+    length = writeName(buffer, length, date.month().name(language));
+    buffer[length++] = ' ';
+    length = writeField(buffer, length, date.day(), options.pad(), zero);
+    if (options.year()) {
+      buffer[length++] = ',';
+      buffer[length++] = ' ';
+      length = writeYear(buffer, length, date.year(), zero);
+    }
+    return new String(buffer, 0, length);
   }
 
   /**

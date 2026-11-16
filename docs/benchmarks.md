@@ -29,7 +29,7 @@ meet it, and the 20 percent peak after the run is a background process, not the 
 
 | Item | Value |
 |---|---|
-| nepdae-java | 1.0.0-rc.1 (working tree after the optimization pass) |
+| nepdate-java | 1.0.0-rc.1 (working tree after the optimization pass) |
 | JDK | Temurin 17.0.20.1, `-Xmx1g` |
 | JMH | 1.37, compiler blackholes |
 | Kotlin port | 0.1.0-rc.1, Kotlin stdlib 2.4.20 |

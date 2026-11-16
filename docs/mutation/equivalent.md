@@ -62,6 +62,6 @@ listed with the reason, not hidden by lowering a threshold.
 | `LenientParser.java` | `scanLenient` | 210 | boundary | A token encodes two character positions, start and end, so its packed value is never `0`; the loop's `found < 0` boundary cannot be hit at zero. |
 | `LenientParser.java` | `tryParse` | 283 | boundary | Same zero-value argument as `parse`: `scanLenient` does not return `0`. |
 | `Parsing.java` | `tryParse` | 168 | boundary | Same zero-value argument: `scanStrictValid` returns a negative error for a zero date, never `0`. |
-| `Text.java` | `appendCustom` | 230 | boundary | `indexOf('\'', index + 1)` searches from at least position 1, so its result can be `-1` or at least 1, never `0`; `close < 0` and `close <= 0` are the same test. |
-| `Text.java` | `appendDigit` | 57 | return null | Every caller appends through the `StringBuilder` and ignores the return value. Returning `null` instead of the builder changes nothing. |
-| `Text.java` | `appendShort` | 94 | negated conditional | The flag selects a four-digit year width or no padding. Every supported year has four digits, so both widths print the same year. |
+| `Text.java` | `appendCustom` | 321 | boundary | `indexOf('\'', index + 1)` searches from at least position 1, so its result can be `-1` or at least 1, never `0`; `close < 0` and `close <= 0` are the same test. |
+| `Text.java` | `appendDigit` | 112 | return null | Every caller appends through the `StringBuilder` and ignores the return value. Returning `null` instead of the builder changes nothing. |
+| `Text.java` | `appendShort` | 169 | negated conditional | The flag selects a four-digit year width or no padding. Every supported year has four digits, so both widths print the same year. |
