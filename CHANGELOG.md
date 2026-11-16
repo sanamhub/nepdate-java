@@ -8,6 +8,12 @@ repository joins at `1.0.0-rc.1` with the other ports
 
 ## [Unreleased]
 
+### Changed
+
+- `toString`, `toIsoString`, `toShortString` and `toLongString` fill one array instead of appending
+  to a `StringBuilder`. The long Nepali form takes about a third of the time and allocates a quarter
+  less. The text is unchanged.
+
 ## [1.0.0-rc.1] - 2026-11-04
 
 The API is stable from 1.0 (hub ADR-0009). This is the first release of the Java port.
