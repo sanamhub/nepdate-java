@@ -1,0 +1,701 @@
+# JMH version: 1.37
+# VM version: JDK 17.0.21, OpenJDK 64-Bit Server VM, 17.0.21+9
+# VM invoker: <jdk>\bin\java.exe
+# VM options: -Xmx1g
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.java.bench.JavaBenchmark.b1BsToAd
+
+# Run progress: 0.00% complete, ETA 00:04:30
+# Fork: 1 of 1
+# Warmup Iteration   1: 12.668 ns/op
+# Warmup Iteration   2: 12.379 ns/op
+# Warmup Iteration   3: 12.175 ns/op
+# Warmup Iteration   4: 12.145 ns/op
+# Warmup Iteration   5: 12.218 ns/op
+Iteration   1: 12.204 ns/op
+Iteration   2: 12.227 ns/op
+Iteration   3: 12.195 ns/op
+Iteration   4: 12.256 ns/op
+Iteration   5: 12.199 ns/op
+Iteration   6: 12.252 ns/op
+Iteration   7: 12.228 ns/op
+Iteration   8: 12.242 ns/op
+Iteration   9: 12.239 ns/op
+Iteration  10: 12.245 ns/op
+
+
+Result "io.github.sanamhub.nepdate.java.bench.JavaBenchmark.b1BsToAd":
+  12.229 ±(99.9%) 0.033 ns/op [Average]
+  (min, avg, max) = (12.195, 12.229, 12.256), stdev = 0.022
+  CI (99.9%): [12.195, 12.262] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.21, OpenJDK 64-Bit Server VM, 17.0.21+9
+# VM invoker: <jdk>\bin\java.exe
+# VM options: -Xmx1g
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.java.bench.JavaBenchmark.b2AdToBs
+
+# Run progress: 5.56% complete, ETA 00:04:29
+# Fork: 1 of 1
+# Warmup Iteration   1: 5.863 ns/op
+# Warmup Iteration   2: 5.742 ns/op
+# Warmup Iteration   3: 5.767 ns/op
+# Warmup Iteration   4: 5.856 ns/op
+# Warmup Iteration   5: 5.783 ns/op
+Iteration   1: 5.844 ns/op
+Iteration   2: 5.751 ns/op
+Iteration   3: 5.794 ns/op
+Iteration   4: 5.760 ns/op
+Iteration   5: 5.807 ns/op
+Iteration   6: 5.767 ns/op
+Iteration   7: 5.769 ns/op
+Iteration   8: 5.744 ns/op
+Iteration   9: 5.771 ns/op
+Iteration  10: 5.755 ns/op
+
+
+Result "io.github.sanamhub.nepdate.java.bench.JavaBenchmark.b2AdToBs":
+  5.776 ±(99.9%) 0.046 ns/op [Average]
+  (min, avg, max) = (5.744, 5.776, 5.844), stdev = 0.030
+  CI (99.9%): [5.730, 5.822] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.21, OpenJDK 64-Bit Server VM, 17.0.21+9
+# VM invoker: <jdk>\bin\java.exe
+# VM options: -Xmx1g
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.java.bench.JavaBenchmark.b3AddDays
+
+# Run progress: 11.11% complete, ETA 00:04:13
+# Fork: 1 of 1
+# Warmup Iteration   1: 4.801 ns/op
+# Warmup Iteration   2: 4.651 ns/op
+# Warmup Iteration   3: 4.560 ns/op
+# Warmup Iteration   4: 4.576 ns/op
+# Warmup Iteration   5: 4.563 ns/op
+Iteration   1: 4.559 ns/op
+Iteration   2: 4.562 ns/op
+Iteration   3: 4.545 ns/op
+Iteration   4: 4.550 ns/op
+Iteration   5: 4.559 ns/op
+Iteration   6: 4.551 ns/op
+Iteration   7: 4.559 ns/op
+Iteration   8: 4.548 ns/op
+Iteration   9: 4.541 ns/op
+Iteration  10: 4.550 ns/op
+
+
+Result "io.github.sanamhub.nepdate.java.bench.JavaBenchmark.b3AddDays":
+  4.552 ±(99.9%) 0.011 ns/op [Average]
+  (min, avg, max) = (4.541, 4.552, 4.562), stdev = 0.007
+  CI (99.9%): [4.542, 4.563] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.21, OpenJDK 64-Bit Server VM, 17.0.21+9
+# VM invoker: <jdk>\bin\java.exe
+# VM options: -Xmx1g
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.java.bench.JavaBenchmark.b4AddMonths
+
+# Run progress: 16.67% complete, ETA 00:03:57
+# Fork: 1 of 1
+# Warmup Iteration   1: 5.287 ns/op
+# Warmup Iteration   2: 5.336 ns/op
+# Warmup Iteration   3: 4.553 ns/op
+# Warmup Iteration   4: 4.573 ns/op
+# Warmup Iteration   5: 4.566 ns/op
+Iteration   1: 4.560 ns/op
+Iteration   2: 4.557 ns/op
+Iteration   3: 4.556 ns/op
+Iteration   4: 4.571 ns/op
+Iteration   5: 4.555 ns/op
+Iteration   6: 4.563 ns/op
+Iteration   7: 4.570 ns/op
+Iteration   8: 4.573 ns/op
+Iteration   9: 4.553 ns/op
+Iteration  10: 4.573 ns/op
+
+
+Result "io.github.sanamhub.nepdate.java.bench.JavaBenchmark.b4AddMonths":
+  4.563 ±(99.9%) 0.012 ns/op [Average]
+  (min, avg, max) = (4.553, 4.563, 4.573), stdev = 0.008
+  CI (99.9%): [4.551, 4.575] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.21, OpenJDK 64-Bit Server VM, 17.0.21+9
+# VM invoker: <jdk>\bin\java.exe
+# VM options: -Xmx1g
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.java.bench.JavaBenchmark.b5LongNepali
+
+# Run progress: 22.22% complete, ETA 00:03:41
+# Fork: 1 of 1
+# Warmup Iteration   1: 34.059 ns/op
+# Warmup Iteration   2: 30.738 ns/op
+# Warmup Iteration   3: 30.226 ns/op
+# Warmup Iteration   4: 30.308 ns/op
+# Warmup Iteration   5: 30.205 ns/op
+Iteration   1: 30.251 ns/op
+Iteration   2: 30.034 ns/op
+Iteration   3: 30.249 ns/op
+Iteration   4: 30.153 ns/op
+Iteration   5: 30.361 ns/op
+Iteration   6: 30.100 ns/op
+Iteration   7: 30.193 ns/op
+Iteration   8: 29.949 ns/op
+Iteration   9: 30.393 ns/op
+Iteration  10: 30.144 ns/op
+
+
+Result "io.github.sanamhub.nepdate.java.bench.JavaBenchmark.b5LongNepali":
+  30.183 ±(99.9%) 0.208 ns/op [Average]
+  (min, avg, max) = (29.949, 30.183, 30.393), stdev = 0.138
+  CI (99.9%): [29.974, 30.391] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.21, OpenJDK 64-Bit Server VM, 17.0.21+9
+# VM invoker: <jdk>\bin\java.exe
+# VM options: -Xmx1g
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.java.bench.JavaBenchmark.b6StrictParse
+
+# Run progress: 27.78% complete, ETA 00:03:25
+# Fork: 1 of 1
+# Warmup Iteration   1: 23.624 ns/op
+# Warmup Iteration   2: 24.296 ns/op
+# Warmup Iteration   3: 23.575 ns/op
+# Warmup Iteration   4: 23.439 ns/op
+# Warmup Iteration   5: 23.492 ns/op
+Iteration   1: 23.356 ns/op
+Iteration   2: 23.515 ns/op
+Iteration   3: 23.371 ns/op
+Iteration   4: 23.574 ns/op
+Iteration   5: 23.378 ns/op
+Iteration   6: 23.567 ns/op
+Iteration   7: 23.386 ns/op
+Iteration   8: 23.589 ns/op
+Iteration   9: 23.375 ns/op
+Iteration  10: 23.483 ns/op
+
+
+Result "io.github.sanamhub.nepdate.java.bench.JavaBenchmark.b6StrictParse":
+  23.459 ±(99.9%) 0.145 ns/op [Average]
+  (min, avg, max) = (23.356, 23.459, 23.589), stdev = 0.096
+  CI (99.9%): [23.314, 23.604] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.21, OpenJDK 64-Bit Server VM, 17.0.21+9
+# VM invoker: <jdk>\bin\java.exe
+# VM options: -Xmx1g
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.java.bench.JavaBenchmark.b7PatroInfo
+
+# Run progress: 33.33% complete, ETA 00:03:09
+# Fork: 1 of 1
+# Warmup Iteration   1: 1.197 ns/op
+# Warmup Iteration   2: 1.104 ns/op
+# Warmup Iteration   3: 1.097 ns/op
+# Warmup Iteration   4: 1.105 ns/op
+# Warmup Iteration   5: 1.099 ns/op
+Iteration   1: 1.095 ns/op
+Iteration   2: 1.109 ns/op
+Iteration   3: 1.114 ns/op
+Iteration   4: 1.099 ns/op
+Iteration   5: 1.096 ns/op
+Iteration   6: 1.096 ns/op
+Iteration   7: 1.102 ns/op
+Iteration   8: 1.097 ns/op
+Iteration   9: 1.095 ns/op
+Iteration  10: 1.097 ns/op
+
+
+Result "io.github.sanamhub.nepdate.java.bench.JavaBenchmark.b7PatroInfo":
+  1.100 ±(99.9%) 0.010 ns/op [Average]
+  (min, avg, max) = (1.095, 1.100, 1.114), stdev = 0.006
+  CI (99.9%): [1.090, 1.110] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.21, OpenJDK 64-Bit Server VM, 17.0.21+9
+# VM invoker: <jdk>\bin\java.exe
+# VM options: -Xmx1g
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.java.bench.JavaBenchmark.b8PatroMonthGrid
+
+# Run progress: 38.89% complete, ETA 00:02:53
+# Fork: 1 of 1
+# Warmup Iteration   1: 56.292 ns/op
+# Warmup Iteration   2: 51.961 ns/op
+# Warmup Iteration   3: 48.746 ns/op
+# Warmup Iteration   4: 48.862 ns/op
+# Warmup Iteration   5: 48.837 ns/op
+Iteration   1: 49.138 ns/op
+Iteration   2: 48.870 ns/op
+Iteration   3: 48.792 ns/op
+Iteration   4: 49.034 ns/op
+Iteration   5: 48.849 ns/op
+Iteration   6: 48.861 ns/op
+Iteration   7: 49.006 ns/op
+Iteration   8: 48.959 ns/op
+Iteration   9: 48.928 ns/op
+Iteration  10: 48.941 ns/op
+
+
+Result "io.github.sanamhub.nepdate.java.bench.JavaBenchmark.b8PatroMonthGrid":
+  48.938 ±(99.9%) 0.155 ns/op [Average]
+  (min, avg, max) = (48.792, 48.938, 49.138), stdev = 0.102
+  CI (99.9%): [48.783, 49.093] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.21, OpenJDK 64-Bit Server VM, 17.0.21+9
+# VM invoker: <jdk>\bin\java.exe
+# VM options: -Xmx1g
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.java.bench.KotlinBenchmark.b1BsToAd
+
+# Run progress: 44.44% complete, ETA 00:02:37
+# Fork: 1 of 1
+# Warmup Iteration   1: 15.116 ns/op
+# Warmup Iteration   2: 14.387 ns/op
+# Warmup Iteration   3: 13.932 ns/op
+# Warmup Iteration   4: 13.850 ns/op
+# Warmup Iteration   5: 13.923 ns/op
+Iteration   1: 13.983 ns/op
+Iteration   2: 13.904 ns/op
+Iteration   3: 13.907 ns/op
+Iteration   4: 13.986 ns/op
+Iteration   5: 13.943 ns/op
+Iteration   6: 13.928 ns/op
+Iteration   7: 13.916 ns/op
+Iteration   8: 13.918 ns/op
+Iteration   9: 13.952 ns/op
+Iteration  10: 13.975 ns/op
+
+
+Result "io.github.sanamhub.nepdate.java.bench.KotlinBenchmark.b1BsToAd":
+  13.941 ±(99.9%) 0.048 ns/op [Average]
+  (min, avg, max) = (13.904, 13.941, 13.986), stdev = 0.032
+  CI (99.9%): [13.894, 13.989] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.21, OpenJDK 64-Bit Server VM, 17.0.21+9
+# VM invoker: <jdk>\bin\java.exe
+# VM options: -Xmx1g
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.java.bench.KotlinBenchmark.b2AdToBs
+
+# Run progress: 50.00% complete, ETA 00:02:22
+# Fork: 1 of 1
+# Warmup Iteration   1: 6.076 ns/op
+# Warmup Iteration   2: 5.866 ns/op
+# Warmup Iteration   3: 5.940 ns/op
+# Warmup Iteration   4: 5.918 ns/op
+# Warmup Iteration   5: 5.902 ns/op
+Iteration   1: 5.904 ns/op
+Iteration   2: 5.913 ns/op
+Iteration   3: 5.918 ns/op
+Iteration   4: 5.900 ns/op
+Iteration   5: 5.926 ns/op
+Iteration   6: 5.938 ns/op
+Iteration   7: 5.909 ns/op
+Iteration   8: 5.885 ns/op
+Iteration   9: 5.927 ns/op
+Iteration  10: 5.910 ns/op
+
+
+Result "io.github.sanamhub.nepdate.java.bench.KotlinBenchmark.b2AdToBs":
+  5.913 ±(99.9%) 0.023 ns/op [Average]
+  (min, avg, max) = (5.885, 5.913, 5.938), stdev = 0.015
+  CI (99.9%): [5.890, 5.936] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.21, OpenJDK 64-Bit Server VM, 17.0.21+9
+# VM invoker: <jdk>\bin\java.exe
+# VM options: -Xmx1g
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.java.bench.KotlinBenchmark.b3AddDays
+
+# Run progress: 55.56% complete, ETA 00:02:06
+# Fork: 1 of 1
+# Warmup Iteration   1: 4.361 ns/op
+# Warmup Iteration   2: 4.172 ns/op
+# Warmup Iteration   3: 4.049 ns/op
+# Warmup Iteration   4: 4.073 ns/op
+# Warmup Iteration   5: 4.053 ns/op
+Iteration   1: 4.063 ns/op
+Iteration   2: 4.051 ns/op
+Iteration   3: 4.066 ns/op
+Iteration   4: 4.051 ns/op
+Iteration   5: 4.056 ns/op
+Iteration   6: 4.042 ns/op
+Iteration   7: 4.061 ns/op
+Iteration   8: 4.057 ns/op
+Iteration   9: 4.060 ns/op
+Iteration  10: 4.052 ns/op
+
+
+Result "io.github.sanamhub.nepdate.java.bench.KotlinBenchmark.b3AddDays":
+  4.056 ±(99.9%) 0.011 ns/op [Average]
+  (min, avg, max) = (4.042, 4.056, 4.066), stdev = 0.007
+  CI (99.9%): [4.045, 4.067] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.21, OpenJDK 64-Bit Server VM, 17.0.21+9
+# VM invoker: <jdk>\bin\java.exe
+# VM options: -Xmx1g
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.java.bench.KotlinBenchmark.b4AddMonths
+
+# Run progress: 61.11% complete, ETA 00:01:50
+# Fork: 1 of 1
+# Warmup Iteration   1: 6.368 ns/op
+# Warmup Iteration   2: 6.038 ns/op
+# Warmup Iteration   3: 6.038 ns/op
+# Warmup Iteration   4: 6.003 ns/op
+# Warmup Iteration   5: 6.031 ns/op
+Iteration   1: 6.008 ns/op
+Iteration   2: 6.024 ns/op
+Iteration   3: 5.998 ns/op
+Iteration   4: 6.035 ns/op
+Iteration   5: 5.997 ns/op
+Iteration   6: 6.030 ns/op
+Iteration   7: 6.017 ns/op
+Iteration   8: 6.035 ns/op
+Iteration   9: 6.007 ns/op
+Iteration  10: 6.003 ns/op
+
+
+Result "io.github.sanamhub.nepdate.java.bench.KotlinBenchmark.b4AddMonths":
+  6.016 ±(99.9%) 0.022 ns/op [Average]
+  (min, avg, max) = (5.997, 6.016, 6.035), stdev = 0.015
+  CI (99.9%): [5.993, 6.038] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.21, OpenJDK 64-Bit Server VM, 17.0.21+9
+# VM invoker: <jdk>\bin\java.exe
+# VM options: -Xmx1g
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.java.bench.KotlinBenchmark.b5LongNepali
+
+# Run progress: 66.67% complete, ETA 00:01:34
+# Fork: 1 of 1
+# Warmup Iteration   1: 96.236 ns/op
+# Warmup Iteration   2: 83.189 ns/op
+# Warmup Iteration   3: 83.526 ns/op
+# Warmup Iteration   4: 83.377 ns/op
+# Warmup Iteration   5: 83.037 ns/op
+Iteration   1: 83.925 ns/op
+Iteration   2: 83.093 ns/op
+Iteration   3: 83.468 ns/op
+Iteration   4: 83.243 ns/op
+Iteration   5: 83.328 ns/op
+Iteration   6: 83.390 ns/op
+Iteration   7: 83.394 ns/op
+Iteration   8: 83.834 ns/op
+Iteration   9: 84.662 ns/op
+Iteration  10: 83.750 ns/op
+
+
+Result "io.github.sanamhub.nepdate.java.bench.KotlinBenchmark.b5LongNepali":
+  83.609 ±(99.9%) 0.690 ns/op [Average]
+  (min, avg, max) = (83.093, 83.609, 84.662), stdev = 0.456
+  CI (99.9%): [82.919, 84.298] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.21, OpenJDK 64-Bit Server VM, 17.0.21+9
+# VM invoker: <jdk>\bin\java.exe
+# VM options: -Xmx1g
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.java.bench.KotlinBenchmark.b6StrictParse
+
+# Run progress: 72.22% complete, ETA 00:01:18
+# Fork: 1 of 1
+# Warmup Iteration   1: 24.010 ns/op
+# Warmup Iteration   2: 24.042 ns/op
+# Warmup Iteration   3: 21.484 ns/op
+# Warmup Iteration   4: 21.311 ns/op
+# Warmup Iteration   5: 21.379 ns/op
+Iteration   1: 21.312 ns/op
+Iteration   2: 21.520 ns/op
+Iteration   3: 21.421 ns/op
+Iteration   4: 21.368 ns/op
+Iteration   5: 21.345 ns/op
+Iteration   6: 21.387 ns/op
+Iteration   7: 21.417 ns/op
+Iteration   8: 21.262 ns/op
+Iteration   9: 21.342 ns/op
+Iteration  10: 21.465 ns/op
+
+
+Result "io.github.sanamhub.nepdate.java.bench.KotlinBenchmark.b6StrictParse":
+  21.384 ±(99.9%) 0.114 ns/op [Average]
+  (min, avg, max) = (21.262, 21.384, 21.520), stdev = 0.075
+  CI (99.9%): [21.270, 21.498] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.21, OpenJDK 64-Bit Server VM, 17.0.21+9
+# VM invoker: <jdk>\bin\java.exe
+# VM options: -Xmx1g
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.java.bench.KotlinBenchmark.b7PatroInfo
+
+# Run progress: 77.78% complete, ETA 00:01:03
+# Fork: 1 of 1
+# Warmup Iteration   1: 1.018 ns/op
+# Warmup Iteration   2: 0.955 ns/op
+# Warmup Iteration   3: 0.954 ns/op
+# Warmup Iteration   4: 0.955 ns/op
+# Warmup Iteration   5: 0.953 ns/op
+Iteration   1: 0.950 ns/op
+Iteration   2: 0.952 ns/op
+Iteration   3: 0.951 ns/op
+Iteration   4: 0.958 ns/op
+Iteration   5: 0.951 ns/op
+Iteration   6: 0.951 ns/op
+Iteration   7: 0.948 ns/op
+Iteration   8: 0.957 ns/op
+Iteration   9: 0.950 ns/op
+Iteration  10: 0.951 ns/op
+
+
+Result "io.github.sanamhub.nepdate.java.bench.KotlinBenchmark.b7PatroInfo":
+  0.952 ±(99.9%) 0.005 ns/op [Average]
+  (min, avg, max) = (0.948, 0.952, 0.958), stdev = 0.003
+  CI (99.9%): [0.947, 0.957] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.21, OpenJDK 64-Bit Server VM, 17.0.21+9
+# VM invoker: <jdk>\bin\java.exe
+# VM options: -Xmx1g
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.java.bench.KotlinBenchmark.b8PatroMonthGrid
+
+# Run progress: 83.33% complete, ETA 00:00:47
+# Fork: 1 of 1
+# Warmup Iteration   1: 54.332 ns/op
+# Warmup Iteration   2: 47.906 ns/op
+# Warmup Iteration   3: 46.168 ns/op
+# Warmup Iteration   4: 46.569 ns/op
+# Warmup Iteration   5: 46.359 ns/op
+Iteration   1: 46.551 ns/op
+Iteration   2: 46.080 ns/op
+Iteration   3: 46.279 ns/op
+Iteration   4: 46.280 ns/op
+Iteration   5: 46.651 ns/op
+Iteration   6: 46.318 ns/op
+Iteration   7: 48.242 ns/op
+Iteration   8: 46.110 ns/op
+Iteration   9: 46.579 ns/op
+Iteration  10: 46.264 ns/op
+
+
+Result "io.github.sanamhub.nepdate.java.bench.KotlinBenchmark.b8PatroMonthGrid":
+  46.535 ±(99.9%) 0.952 ns/op [Average]
+  (min, avg, max) = (46.080, 46.535, 48.242), stdev = 0.630
+  CI (99.9%): [45.584, 47.487] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.21, OpenJDK 64-Bit Server VM, 17.0.21+9
+# VM invoker: <jdk>\bin\java.exe
+# VM options: -Xmx1g
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.java.bench.ShivathapaaBenchmark.b1BsToAd
+
+# Run progress: 88.89% complete, ETA 00:00:31
+# Fork: 1 of 1
+# Warmup Iteration   1: 702.059 ns/op
+# Warmup Iteration   2: 640.303 ns/op
+# Warmup Iteration   3: 647.176 ns/op
+# Warmup Iteration   4: 641.859 ns/op
+# Warmup Iteration   5: 649.841 ns/op
+Iteration   1: 640.376 ns/op
+Iteration   2: 644.709 ns/op
+Iteration   3: 640.666 ns/op
+Iteration   4: 645.930 ns/op
+Iteration   5: 642.110 ns/op
+Iteration   6: 645.620 ns/op
+Iteration   7: 639.747 ns/op
+Iteration   8: 641.384 ns/op
+Iteration   9: 637.275 ns/op
+Iteration  10: 641.061 ns/op
+
+
+Result "io.github.sanamhub.nepdate.java.bench.ShivathapaaBenchmark.b1BsToAd":
+  641.888 ±(99.9%) 4.181 ns/op [Average]
+  (min, avg, max) = (637.275, 641.888, 645.930), stdev = 2.766
+  CI (99.9%): [637.706, 646.069] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.21, OpenJDK 64-Bit Server VM, 17.0.21+9
+# VM invoker: <jdk>\bin\java.exe
+# VM options: -Xmx1g
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.java.bench.ShivathapaaBenchmark.b2AdToBs
+
+# Run progress: 94.44% complete, ETA 00:00:15
+# Fork: 1 of 1
+# Warmup Iteration   1: 732.909 ns/op
+# Warmup Iteration   2: 662.124 ns/op
+# Warmup Iteration   3: 636.829 ns/op
+# Warmup Iteration   4: 602.164 ns/op
+# Warmup Iteration   5: 565.024 ns/op
+Iteration   1: 653.876 ns/op
+Iteration   2: 656.957 ns/op
+Iteration   3: 660.490 ns/op
+Iteration   4: 656.249 ns/op
+Iteration   5: 654.300 ns/op
+Iteration   6: 655.110 ns/op
+Iteration   7: 660.725 ns/op
+Iteration   8: 656.632 ns/op
+Iteration   9: 659.332 ns/op
+Iteration  10: 655.409 ns/op
+
+
+Result "io.github.sanamhub.nepdate.java.bench.ShivathapaaBenchmark.b2AdToBs":
+  656.908 ±(99.9%) 3.746 ns/op [Average]
+  (min, avg, max) = (653.876, 656.908, 660.725), stdev = 2.478
+  CI (99.9%): [653.162, 660.654] (assumes normal distribution)
+
+
+# Run complete. Total time: 00:04:44
+
+REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
+why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
+experiments, perform baseline and negative tests that provide experimental control, make sure
+the benchmarking environment is safe on JVM/OS/HW level, ask for reviews from the domain experts.
+Do not assume the numbers tell you what you want them to tell.
+
+NOTE: Current JVM experimentally supports Compiler Blackholes, and they are in use. Please exercise
+extra caution when trusting the results, look into the generated code to check the benchmark still
+works, and factor in a small probability of new VM bugs. Additionally, while comparisons between
+different JVMs are already problematic, the performance difference caused by different Blackhole
+modes can be very significant. Please make sure you use the consistent Blackhole mode for comparisons.
+
+Benchmark                         Mode  Cnt    Score   Error  Units
+JavaBenchmark.b1BsToAd            avgt   10   12.229 ± 0.033  ns/op
+JavaBenchmark.b2AdToBs            avgt   10    5.776 ± 0.046  ns/op
+JavaBenchmark.b3AddDays           avgt   10    4.552 ± 0.011  ns/op
+JavaBenchmark.b4AddMonths         avgt   10    4.563 ± 0.012  ns/op
+JavaBenchmark.b5LongNepali        avgt   10   30.183 ± 0.208  ns/op
+JavaBenchmark.b6StrictParse       avgt   10   23.459 ± 0.145  ns/op
+JavaBenchmark.b7PatroInfo         avgt   10    1.100 ± 0.010  ns/op
+JavaBenchmark.b8PatroMonthGrid    avgt   10   48.938 ± 0.155  ns/op
+KotlinBenchmark.b1BsToAd          avgt   10   13.941 ± 0.048  ns/op
+KotlinBenchmark.b2AdToBs          avgt   10    5.913 ± 0.023  ns/op
+KotlinBenchmark.b3AddDays         avgt   10    4.056 ± 0.011  ns/op
+KotlinBenchmark.b4AddMonths       avgt   10    6.016 ± 0.022  ns/op
+KotlinBenchmark.b5LongNepali      avgt   10   83.609 ± 0.690  ns/op
+KotlinBenchmark.b6StrictParse     avgt   10   21.384 ± 0.114  ns/op
+KotlinBenchmark.b7PatroInfo       avgt   10    0.952 ± 0.005  ns/op
+KotlinBenchmark.b8PatroMonthGrid  avgt   10   46.535 ± 0.952  ns/op
+ShivathapaaBenchmark.b1BsToAd     avgt   10  641.888 ± 4.181  ns/op
+ShivathapaaBenchmark.b2AdToBs     avgt   10  656.908 ± 3.746  ns/op
+
+Benchmark result is saved to docs/raw/2026-11-16/jmh.json
