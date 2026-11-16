@@ -22,7 +22,7 @@ plugins {
     alias(libs.plugins.maven.publish) apply false
 }
 
-// Java 17 is the floor (ADR-0001). CI runs the whole build on 17, 21 and 25 through
+// Java 17 is the floor (ADR-0001). CI runs the whole build on 17, 21, 25 and 27 through
 // -PnepdateToolchain; the bytecode target stays 17 either way.
 val javaVersion: Int = providers.gradleProperty("nepdateToolchain").orNull?.toInt() ?: 17
 val coverageMinimum: String = providers.gradleProperty("nepdateCoverageMinimum").get()
