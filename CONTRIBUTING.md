@@ -53,7 +53,7 @@ and release checks. `./scripts/check-docs.sh` checks the prose rules separately.
 - One logical change per pull request. A change to `shared/` created by the sync job is its own
   pull request.
 - The pull request template lists the gates; all of them must be green. CI runs on Linux, macOS and
-  Windows over Java 17, 21 and 25.
+  Windows over Java 17, 21, 25 and 27.
 - Do not add co-author or tool-attribution trailers.
 
 ## Licence
