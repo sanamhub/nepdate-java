@@ -40,8 +40,8 @@ NepDate and the other ports, checked against the shared vectors.
 Gradle (Kotlin DSL):
 
 ```kotlin
-implementation("io.github.sanamhub:nepdate-java:1.0.0-rc.1")
-implementation("io.github.sanamhub:nepdate-java-patro:1.0.0-rc.1") // tithi, holidays, events
+implementation("io.github.sanamhub:nepdate-java:1.0.0")
+implementation("io.github.sanamhub:nepdate-java-patro:1.0.0") // tithi, holidays, events
 ```
 
 Maven:
@@ -50,7 +50,7 @@ Maven:
 <dependency>
   <groupId>io.github.sanamhub</groupId>
   <artifactId>nepdate-java</artifactId>
-  <version>1.0.0-rc.1</version>
+  <version>1.0.0</version>
 </dependency>
 ```
 
