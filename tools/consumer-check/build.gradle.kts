@@ -4,7 +4,7 @@ plugins {
     application
 }
 
-val nepdateVersion: String = providers.gradleProperty("nepdateVersion").getOrElse("1.0.0-rc.1")
+val nepdateVersion: String = providers.gradleProperty("nepdateVersion").getOrElse("1.0.0")
 
 repositories {
     mavenLocal()

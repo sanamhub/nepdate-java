@@ -29,8 +29,8 @@ body:
     id: version
     attributes:
       label: Version
-      description: The artifact version, for example nepdate-java 1.0.0-rc.1.
-      placeholder: nepdate-java 1.0.0-rc.1
+      description: The artifact version, for example nepdate-java 1.0.0.
+      placeholder: nepdate-java 1.0.0
     validations:
       required: true
   - type: input

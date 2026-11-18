@@ -8,6 +8,8 @@ repository joins at `1.0.0-rc.1` with the other ports
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-18
+
 ### Changed
 
 - `toString`, `toIsoString`, `toShortString` and `toLongString` fill one array instead of appending
