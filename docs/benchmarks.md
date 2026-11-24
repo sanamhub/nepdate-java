@@ -6,7 +6,7 @@ Time and allocation of the Java port on operations B1 to B8 of
 `io.github.sanamhub:nepdate:0.1.0-rc.1` and `nepdate-patro:0.1.0-rc.1`, called from Java in the same
 JVM and the same run. The C# column is copied from the hub's
 [`docs/benchmarks/dotnet.md`](https://github.com/sanamhub/nepdate/blob/main/docs/benchmarks/dotnet.md)
-(.NET 10 column, NepDate 2.0.7, run 2026-11-16). The competitor is
+(.NET 10 column, NepDate 2.1.0, run 2026-11-20). The competitor is
 `io.github.shivathapaa:nepali-date-picker-core-jvm` 3.3.0, the only library that passes
 [`docs/competitors.md`](competitors.md).
 
@@ -70,14 +70,14 @@ above, with the Kotlin port measured in the same session.
 
 | ID | Operation | Java previous | Java now | error | B/op | Kotlin | error | shivathapaa | C# .NET 10 |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| B1 | BS to AD | 14.03 | 12.23 | 0.03 | 0 | 13.94 | 0.05 | 641.89 | 13.27 |
-| B2 | AD to BS | 6.70 | 5.78 | 0.05 | 0 | 5.91 | 0.02 | 656.91 | 18.70 |
-| B3 | add 1000 days | 5.23 | 4.55 | 0.01 | 0 | 4.06 | 0.01 | n/a | 20.06 |
-| B4 | add 13 months, Clamp | 5.32 | 4.56 | 0.01 | 0 | 6.02 | 0.02 | n/a | 19.30 |
-| B5 | long format, Nepali, weekday | 91.99 | 30.18 | 0.21 | 223 | 83.61 | 0.69 | n/a | 139.04 |
-| B6 | strict parse `YYYY/MM/DD` | 27.41 | 23.46 | 0.14 | 0 | 21.38 | 0.11 | n/a | 21.13 |
-| B7 | patro info | 1.29 | 1.10 | 0.01 | 0 | 0.95 | 0.00 | none | 48.63 |
-| B8 | patro month grid | 55.81 | 48.94 | 0.15 | 0 | 46.54 | 0.95 | none | 3,274.50 |
+| B1 | BS to AD | 14.03 | 12.23 | 0.03 | 0 | 13.94 | 0.05 | 641.89 | 5.60 |
+| B2 | AD to BS | 6.70 | 5.78 | 0.05 | 0 | 5.91 | 0.02 | 656.91 | 5.90 |
+| B3 | add 1000 days | 5.23 | 4.55 | 0.01 | 0 | 4.06 | 0.01 | n/a | 2.79 |
+| B4 | add 13 months, Clamp | 5.32 | 4.56 | 0.01 | 0 | 6.02 | 0.02 | n/a | 2.45 |
+| B5 | long format, Nepali, weekday | 91.99 | 30.18 | 0.21 | 223 | 83.61 | 0.69 | n/a | 29.96 |
+| B6 | strict parse `YYYY/MM/DD` | 27.41 | 23.46 | 0.14 | 0 | 21.38 | 0.11 | n/a | 7.28 |
+| B7 | patro info | 1.29 | 1.10 | 0.01 | 0 | 0.95 | 0.00 | none | 16.46 |
+| B8 | patro month grid | 55.81 | 48.94 | 0.15 | 0 | 46.54 | 0.95 | none | 633.13 |
 
 B/op is 0 where JMH's GC profiler reports no allocation. B5 allocates the formatted string, as every
 port does: 223 B/op now, 303 B/op in the previous run.
@@ -89,9 +89,9 @@ BS 2086-07-23, 2088-01-04 and 2089-06-10, so it is listed, never ranked first.
 ## Against C#
 
 BENCHMARK section 6 puts Java with Go, Swift and Kotlin: B1, B2 and B7 within 1.5 times C# NepDate,
-with the date object as the only allowed allocation. Java is 0.92 times C# on B1, 0.31 on B2 and
-0.02 on B7, and the date itself is the only allocation in those rows. B6 is 1.11 times C#, inside
-the same bound if it is applied to every row. Passes.
+with the date object as the only allowed allocation. Java is 2.18 times C# on B1, 0.98 on B2 and
+0.07 on B7, and the date itself is the only allocation in those rows. B6 is 3.22 times C#, outside
+the same bound if it is applied to every row. B1 does not pass; B2 and B7 do.
 
 ## Against the Kotlin port
 
