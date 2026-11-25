@@ -12,7 +12,7 @@ googleJavaFormat = "1.28.0"
 jacoco = "0.8.16"
 maven-publish = "0.37.0"
 mutation-gradle-plugin = "1.19.0"
-kotlin-port = "0.1.0-rc.1"
+kotlin-port = "1.0.0-rc.1"
 shivathapaa = "3.3.0"
 
 [libraries]
